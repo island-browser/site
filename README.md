@@ -45,7 +45,7 @@ python3 -m http.server 4200 --directory /tmp/pages   # open http://localhost:420
 | ----------------------- | --------------------------------------- | ----------------------------------------- |
 | `NEXT_PUBLIC_BASE_PATH` | empty                                   | Path prefix; `/site` on Pages             |
 | `NEXT_PUBLIC_SITE_URL`  | `https://island-browser.github.io/site` | Canonical URLs, sitemap, OpenGraph        |
-| `ISLAND_REPO_TOKEN`     | unset                                   | Read token for the browser repo           |
+| `ISLAND_READ_TOKEN`     | unset                                   | Read token for the browser repo           |
 | `GITHUB_TOKEN`          | unset                                   | Fallback token for GitHub requests        |
 | `ISLAND_DATA_OFFLINE`   | unset                                   | `1` skips the network in `fetch-data`     |
 | `ISLAND_LOCAL_CHECKOUT` | `../island`                             | Sibling checkout used as a local fallback |
@@ -59,7 +59,7 @@ Repository coordinates (owner, repo names, branch, default site URL) live in one
 `data/`, taking the first source that works:
 
 1. GitHub: `CHANGELOG.md` and `VERSION` from `raw.githubusercontent.com`, and the release list from
-   `api.github.com/repos/island-browser/island/releases`, sending `ISLAND_REPO_TOKEN` (or
+   `api.github.com/repos/island-browser/island/releases`, sending `ISLAND_READ_TOKEN` (or
    `GITHUB_TOKEN`) when set.
 2. A sibling checkout at `../island`, for local development.
 3. The snapshot already committed in `data/`, so a blocked or failed network never breaks a build.
@@ -71,14 +71,14 @@ published yet — build from source" state.
 **The browser repository is private for now**, so unauthenticated fetches return 404 and the build
 uses the committed snapshot. To build from live data in CI, add a fine-grained personal access
 token with read-only *Contents* access to `island-browser/island` as the repository secret
-`ISLAND_REPO_TOKEN`. Refresh the snapshot locally with `npm run fetch-data` and commit `data/`.
+`ISLAND_READ_TOKEN`. Refresh the snapshot locally with `npm run fetch-data` and commit `data/`.
 
 ## Design tokens
 
 `app/globals.css` declares the Graphite tokens (light, dark, space markers, radii, spacing, motion)
 as CSS variables. `npm run check:tokens` reads the fenced `design-tokens` block from Island's
 `DESIGN.md` (from `../island/DESIGN.md` if present, otherwise from the browser repo on GitHub with
-`ISLAND_REPO_TOKEN`) and fails with a per-token diff if anything drifted.
+`ISLAND_READ_TOKEN`) and fails with a per-token diff if anything drifted.
 
 ## Deploy
 
@@ -93,7 +93,7 @@ gh api repos/island-browser/site/dispatches -f event_type=island-release
 ```
 
 One-time setup: in the repository settings, set **Pages → Source** to **GitHub Actions**, and add
-the `ISLAND_REPO_TOKEN` secret while the browser repo is private.
+the `ISLAND_READ_TOKEN` secret while the browser repo is private.
 
 ## License
 

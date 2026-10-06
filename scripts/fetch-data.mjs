@@ -3,7 +3,7 @@
 // and the list of GitHub releases. Runs as `prebuild`.
 //
 // Each file is resolved in order and the first good source wins:
-//   1. GitHub (raw.githubusercontent.com / api.github.com; ISLAND_REPO_TOKEN or GITHUB_TOKEN
+//   1. GitHub (raw.githubusercontent.com / api.github.com; ISLAND_READ_TOKEN or GITHUB_TOKEN
 //      is sent when set — the browser repo is private for now, so unauthenticated calls 404),
 //   2. a sibling checkout at ../island (local development),
 //   3. the snapshot already committed under data/ (left untouched).
@@ -19,8 +19,8 @@ import { rawUrl, releasesApiUrl, repoSlug } from "../site.config.ts";
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const localCheckout = path.resolve(root, process.env.ISLAND_LOCAL_CHECKOUT || "../island");
 const offline = process.env.ISLAND_DATA_OFFLINE === "1";
-// ISLAND_REPO_TOKEN: a fine-grained token with read access to the (currently private) browser repo.
-const token = process.env.ISLAND_REPO_TOKEN || process.env.GITHUB_TOKEN || "";
+// ISLAND_READ_TOKEN: a fine-grained token with read access to the (currently private) browser repo.
+const token = process.env.ISLAND_READ_TOKEN || process.env.GITHUB_TOKEN || "";
 const TIMEOUT_MS = 10_000;
 
 function headers(accept) {

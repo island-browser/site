@@ -12,6 +12,7 @@ on:
   repository_dispatch:
     types:
       - island-release
+      - island-updated
   workflow_dispatch:
 
 permissions:
@@ -41,13 +42,13 @@ jobs:
       - name: Lint
         run: npm run lint
 
-      # The browser repo is private for now: without an ISLAND_REPO_TOKEN secret (a fine-grained
+      # The browser repo is private for now: without an ISLAND_READ_TOKEN secret (a fine-grained
       # token with read access to island-browser/island) DESIGN.md cannot be fetched and this
       # check fails rather than passing silently.
       - name: Check design tokens against Island's DESIGN.md
         run: npm run check:tokens
         env:
-          ISLAND_REPO_TOKEN: ${{ secrets.ISLAND_REPO_TOKEN }}
+          ISLAND_READ_TOKEN: ${{ secrets.ISLAND_READ_TOKEN }}
 
       - name: Configure Pages
         uses: actions/configure-pages@45bfe0192ca1faeb007ade9deae92b16b8254a0d
@@ -60,7 +61,7 @@ jobs:
           NEXT_PUBLIC_BASE_PATH: /site
           NEXT_PUBLIC_SITE_URL: https://island-browser.github.io/site
           NEXT_TELEMETRY_DISABLED: "1"
-          ISLAND_REPO_TOKEN: ${{ secrets.ISLAND_REPO_TOKEN }}
+          ISLAND_READ_TOKEN: ${{ secrets.ISLAND_READ_TOKEN }}
           GITHUB_TOKEN: ${{ github.token }}
 
       - name: Upload the Pages artifact

@@ -4,7 +4,7 @@
 //
 // DESIGN.md is read from a sibling checkout (../island/DESIGN.md, or ISLAND_LOCAL_CHECKOUT)
 // when present, otherwise fetched from the browser repo's main branch. The browser repo is
-// private for now, so the fetch needs ISLAND_REPO_TOKEN (or GITHUB_TOKEN) with read access.
+// private for now, so the fetch needs ISLAND_READ_TOKEN (or GITHUB_TOKEN) with read access.
 
 import { existsSync, readFileSync } from "node:fs";
 import path from "node:path";
@@ -25,14 +25,14 @@ async function loadDesign() {
     return { text: readFileSync(localDesign, "utf8"), source: localDesign };
   }
   const url = rawUrl("DESIGN.md");
-  const token = process.env.ISLAND_REPO_TOKEN || process.env.GITHUB_TOKEN || "";
+  const token = process.env.ISLAND_READ_TOKEN || process.env.GITHUB_TOKEN || "";
   const headers = { "User-Agent": "island-site-check-tokens" };
   if (token) headers.Authorization = `Bearer ${token}`;
   const res = await fetch(url, { headers, signal: AbortSignal.timeout(15_000) });
   if (!res.ok) {
     throw new Error(
       `could not read DESIGN.md: no local checkout at ${localDesign} and ${url} returned HTTP ${res.status}` +
-        (token ? "" : " (no ISLAND_REPO_TOKEN/GITHUB_TOKEN set; the browser repo is private)"),
+        (token ? "" : " (no ISLAND_READ_TOKEN/GITHUB_TOKEN set; the browser repo is private)"),
     );
   }
   return { text: await res.text(), source: url };
