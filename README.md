@@ -78,7 +78,9 @@ token with read-only *Contents* access to `island-browser/island` as the reposit
 `app/globals.css` declares the Graphite tokens (light, dark, space markers, radii, spacing, motion)
 as CSS variables. `npm run check:tokens` reads the fenced `design-tokens` block from Island's
 `DESIGN.md` (from `../island/DESIGN.md` if present, otherwise from the browser repo on GitHub with
-`ISLAND_READ_TOKEN`) and fails with a per-token diff if anything drifted.
+`ISLAND_READ_TOKEN`) and fails with a per-token diff if anything drifted. In CI the check runs
+only when the `ISLAND_READ_TOKEN` secret is set; without it the workflow skips it with a warning.
+Pull requests run lint, the token check, and the build, but never deploy.
 
 ## Deploy
 
