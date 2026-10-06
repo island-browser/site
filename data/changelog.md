@@ -13,6 +13,19 @@ version bump to `main` tags the commit `vX.Y.Z` automatically. Versions before
 
 ## [Unreleased]
 
+### Added
+
+- Automatic builds: every push to `main` that changes the app builds, tests, and packages all
+  six targets and publishes them as unsigned GitHub prereleases — a rolling `nightly`, plus a
+  `vX.Y.Z` prerelease with the changelog notes the first time a version builds. Each release
+  carries the six archives and one `SHA256SUMS.txt`.
+- `scripts/version.py notes` prints one version's changelog section.
+- In-browser updates (Settings > Updates): checks the GitHub releases of `island-browser/island`
+  shortly after startup (at most once a day, `ISLAND_DISABLE_UPDATES=1` to turn off) or on demand,
+  downloads the platform archive, verifies it against `SHA256SUMS.txt`, and installs it on
+  "Restart to update" with a backup and automatic rollback. SemVer pre-releases are opt-in; build
+  trees and read-only installs only report new versions.
+
 ### Changed
 
 - New "Graphite" design language across the browser: neutral near-black and white surfaces,
