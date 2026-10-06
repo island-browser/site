@@ -13,7 +13,7 @@ import { themeInitScript } from "@/lib/theme-script";
 
 export const metadata: Metadata = {
   metadataBase: new URL(`${siteUrl}/`),
-  title: { default: `Island — ${tagline.toLowerCase()}`, template: "%s — Island" },
+  title: { default: `Island — ${tagline.charAt(0).toLowerCase()}${tagline.slice(1)}`, template: "%s — Island" },
   description,
   applicationName: "Island",
   openGraph: {

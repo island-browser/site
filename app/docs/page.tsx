@@ -192,7 +192,7 @@ $ ctest --test-dir build --output-on-failure`}
 
               <h3 id="tools">The tools</h3>
               <div className="table-wrap">
-                <table className="data-table">
+                <table className="data-table stack">
                   <thead>
                     <tr>
                       <th scope="col">Tool</th>
@@ -230,7 +230,7 @@ $ ctest --test-dir build --output-on-failure`}
               <h3 id="environment">Environment variables</h3>
               <p>Set these before launching Island.</p>
               <div className="table-wrap">
-                <table className="data-table">
+                <table className="data-table stack">
                   <thead>
                     <tr>
                       <th scope="col">Variable</th>
@@ -244,7 +244,10 @@ $ ctest --test-dir build --output-on-failure`}
                         <td>
                           <code>{v.name}</code>
                         </td>
-                        <td className="whitespace-nowrap font-mono text-[12.5px]">{v.value}</td>
+                        <td className="whitespace-nowrap font-mono text-[12.5px]">
+                          <span className="text-fg-2 sm:hidden">value: </span>
+                          {v.value}
+                        </td>
                         <td>{v.effect}</td>
                       </tr>
                     ))}

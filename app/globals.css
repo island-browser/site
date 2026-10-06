@@ -623,6 +623,40 @@
   .data-table code {
     color: var(--text);
     font-size: 12.5px;
+    overflow-wrap: normal;
+    white-space: nowrap;
+  }
+
+  /* Phones: multi-column tables become stacked rows. */
+  @media (max-width: 639px) {
+    .data-table.stack thead {
+      display: none;
+    }
+
+    .data-table.stack tr {
+      display: block;
+      padding: 12px 16px;
+      border-top: 1px solid var(--border);
+    }
+
+    .data-table.stack tbody tr:first-child {
+      border-top: 0;
+    }
+
+    .data-table.stack td {
+      display: block;
+      padding: 0;
+      border: 0;
+    }
+
+    .data-table.stack td + td {
+      margin-top: 6px;
+    }
+
+    .data-table.stack td code {
+      white-space: normal;
+      overflow-wrap: anywhere;
+    }
   }
 }
 

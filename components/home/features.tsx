@@ -402,7 +402,7 @@ export function Features() {
             className={`cell-pad ${f.cell} ${feat.wide ? f.cellWide : ""} ${feat.span ?? ""}`}
           >
             <div className={f.copy}>
-              <div className="mb-4 flex items-center gap-2">
+              <div className="mb-4 flex h-5 items-center gap-2">
                 <span className="label">
                   {String(i + 1).padStart(2, "0")} · {feat.label}
                 </span>
