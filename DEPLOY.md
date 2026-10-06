@@ -1,40 +1,36 @@
 # Deploying the Island site
 
-The site under `site/` is fully static (no build step, no dependencies) and all
-page links are relative, so it runs unchanged on any static host.
-
-## Vercel (fastest path)
+The site is static and all page links are relative, so it runs unchanged on any static host. Build
+it first: the version markers and the changelog come from the browser repository.
 
 ```bash
-npm i -g vercel          # once
-cd site
-vercel --prod
+git clone --depth 1 https://github.com/island-browser/island ../island
+python3 scripts/build.py --island ../island --out _site
 ```
-
-Deploying the `site/` folder directly means no project settings are needed;
-`vercel.json` in the folder adds cache and security headers automatically.
-
-## After the first deploy: point the SEO URLs at the new domain
-
-Canonical, `og:url`, JSON-LD, the sitemap and robots entries ship pointing at
-the GitHub Pages URL. Rewrite them to the deployed domain once, then commit:
-
-```bash
-python3 scripts/site_set_domain.py https://<your-project>.vercel.app
-git commit -am "Point the site SEO URLs at <your-project>.vercel.app"
-```
-
-Running the script again with a different domain (or the original
-`https://island-browser.github.io/island`) rewrites safely — only the exact current
-domain is replaced.
 
 ## GitHub Pages (already wired)
 
-`.github/workflows/pages.yml` deploys `site/` to GitHub Pages on every push to
-`main` that touches `site/`, `CHANGELOG.md`, or `VERSION` — no extra setup beyond
-enabling Pages once in the repository settings (Source: GitHub Actions). The job
-runs `python3 scripts/version.py check` first, so a stale `site/changelog.html`
-or version marker fails the deploy instead of publishing; fix it with
-`python3 scripts/version.py sync`.
-If you use Vercel as the primary host, the Pages copy still works; update the
-SEO URLs to whichever domain should be canonical.
+`.github/workflows/pages.yml` builds `_site` and deploys it. Enable Pages once in the repository
+settings (Source: GitHub Actions). The build fails instead of publishing when Island's `VERSION`
+and `CHANGELOG.md` disagree or when `assets/css/site.css` drifts from the design tokens.
+
+## Vercel
+
+```bash
+npm i -g vercel          # once
+vercel --prod --cwd _site
+```
+
+The build copies `vercel.json` into `_site` with the pages; it adds cache and security headers.
+
+## Pointing the SEO URLs at another domain
+
+Canonical, `og:url`, JSON-LD, the sitemap and robots entries point at
+`https://island-browser.github.io/site`. Rewrite them to another domain once, then commit:
+
+```bash
+python3 scripts/set_domain.py https://<your-domain>
+git commit -am "Point the site SEO URLs at <your-domain>"
+```
+
+Only the exact current domain is replaced, so running it again is safe.
