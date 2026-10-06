@@ -13,9 +13,13 @@ export type PlatformCard = {
   name: string;
   detail: string;
   verified: boolean;
+  /** The installer's kind ("Disk image"), or null when the download is the archive itself. */
+  kind: string | null;
   file: string;
   url: string | null;
   size: number | null;
+  /** The portable archive, when an installer is the main download. */
+  portable: { file: string; url: string; size: number } | null;
 };
 
 type Detected = { os: OsFamily; arch: Arch | null } | null;
@@ -103,12 +107,21 @@ export function PlatformGrid({ cards, hasRelease }: { cards: PlatformCard[]; has
                 <>
                   <a href={c.url} className={`btn w-full ${mine ? "btn-primary" : "btn-secondary"}`}>
                     <ArrowDownToLine className="size-4" aria-hidden />
-                    Download
+                    {c.kind ?? "Download"}
                     {c.size ? <span className="font-mono text-xs opacity-70">{formatSize(c.size)}</span> : null}
                   </a>
                   <p className="mt-2.5 truncate font-mono text-[11px] text-fg-2" title={c.file}>
                     {c.file}
                   </p>
+                  {c.portable && (
+                    <p className="mt-1 truncate text-[12px] text-fg-2">
+                      or{" "}
+                      <a href={c.portable.url} className="link" title={c.portable.file}>
+                        portable {c.portable.file.endsWith(".tar.gz") ? ".tar.gz" : ".zip"}
+                      </a>{" "}
+                      <span className="font-mono text-[11px]">{formatSize(c.portable.size)}</span>
+                    </p>
+                  )}
                 </>
               ) : (
                 <div className="rounded-md border border-dashed border-line-strong px-3 py-2.5">
