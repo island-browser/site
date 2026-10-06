@@ -5,7 +5,7 @@ import { CodeBlock } from "@/components/code-block";
 import { DocSection } from "@/components/docs/doc-section";
 import { DocsToc, type TocItem } from "@/components/docs/docs-toc";
 import { Keys, KeyList } from "@/components/keys";
-import { mcpBridgeConfig, shortcuts, toolGroups } from "@/lib/content";
+import { acpProviders, mcpBridgeConfig, shortcuts, toolGroups } from "@/lib/content";
 import { getVersion } from "@/lib/data";
 import { links } from "@/lib/site";
 import { pageMetadata } from "@/lib/metadata";
@@ -48,9 +48,8 @@ const ENV_VARS = [
     value: "command line",
     effect: (
       <>
-        The ACP agent the sidebar runs. Defaults to{" "}
-        <code>npx -y @zed-industries/claude-code-acp</code>; Settings → Agent &amp; tools changes it
-        too.
+        Overrides the ACP agent the sidebar runs, whatever provider is selected in Settings → Agent
+        &amp; tools.
       </>
     ),
   },
@@ -163,13 +162,35 @@ $ ctest --test-dir build --output-on-failure`}
               <h3 id="acp">The agent in the sidebar (ACP)</h3>
               <p>
                 <Keys combo={["Cmd", "J"]} /> opens the agent panel. It runs an{" "}
-                <a href={links.acp}>Agent Client Protocol</a> agent as a local program — by default{" "}
-                <code>npx -y @zed-industries/claude-code-acp</code> — and hands it Island&rsquo;s
-                browser tools automatically. Change the command in Settings → Agent &amp; tools, or
-                set <code>ISLAND_AGENT_COMMAND</code> before launching. Replies stream in, tool calls
-                that need approval ask first, <Keys combo={["Esc"]} /> stops a turn, and the agent is
-                told which tab you are looking at.
+                <a href={links.acp}>Agent Client Protocol</a> agent as a local program and hands it
+                Island&rsquo;s browser tools automatically. Pick the provider from the panel header or
+                in Settings → Agent &amp; tools; a custom command or{" "}
+                <code>ISLAND_AGENT_COMMAND</code> runs any other ACP agent. Replies stream in, tool
+                calls that need approval ask first, <Keys combo={["Esc"]} /> stops a turn, and the
+                agent is told which tab you are looking at.
               </p>
+              <div className="table-wrap">
+                <table className="data-table">
+                  <thead>
+                    <tr>
+                      <th>Provider</th>
+                      <th>Command</th>
+                      <th>Needs</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {acpProviders.map((p) => (
+                      <tr key={p.id}>
+                        <td>{p.name}</td>
+                        <td>
+                          <code>{p.command}</code>
+                        </td>
+                        <td>{p.needs}</td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
 
               <h3 id="mcp">Island&rsquo;s tools for any agent (MCP)</h3>
               <p>
