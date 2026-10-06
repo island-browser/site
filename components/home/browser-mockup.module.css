@@ -85,6 +85,10 @@
   color: var(--text);
 }
 
+.address .addressEmpty {
+  color: var(--text-2);
+}
+
 .pins {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
@@ -162,12 +166,17 @@
   display: flex;
   align-items: center;
   gap: 9px;
+  width: 100%;
   height: 32px;
   padding-inline: 8px;
   border: 1px solid transparent;
   border-radius: var(--radius-sm);
+  background: none;
+  font: inherit;
   font-size: 12.5px;
+  text-align: left;
   color: color-mix(in srgb, var(--text) 82%, var(--tint));
+  cursor: pointer;
   transition:
     background-color var(--motion-fast) var(--ease-out),
     color var(--motion-fast) var(--ease-out);
@@ -185,6 +194,11 @@
   color: var(--text);
   font-weight: 500;
   box-shadow: 0 1px 2px rgb(0 0 0 / 0.06);
+}
+
+.tab:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 1px;
 }
 
 .tabNew {
@@ -412,6 +426,149 @@
   color: var(--text-2);
   font-family: var(--font-mono);
   font-size: 11px;
+}
+
+/* Switching tabs swaps the page; it fades in instead of popping. */
+.page {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  min-height: 0;
+  animation: pageIn var(--motion-fast) var(--ease-out) both;
+}
+
+/* ------------------------------------------------------------ doc pages */
+
+.doc {
+  flex: 1;
+  min-height: 0;
+  overflow: hidden;
+  padding: 20px 24px;
+}
+
+.doc p,
+.doc h3,
+.doc h4 {
+  margin: 0;
+}
+
+.docSite {
+  color: var(--text-2);
+  font-family: var(--font-mono);
+  font-size: 10.5px;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.docTitle {
+  margin-top: 10px !important;
+  font-size: 19px;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+}
+
+.docLead {
+  max-width: 62ch;
+  margin-top: 8px !important;
+  color: var(--text-2);
+  font-size: 12.5px;
+  line-height: 1.55;
+}
+
+.docSection {
+  max-width: 62ch;
+  margin-top: 14px;
+  padding-top: 12px;
+  border-top: 1px solid var(--border);
+}
+
+.docSection h4 {
+  font-size: 12.5px;
+  font-weight: 600;
+}
+
+.docSection p {
+  margin-top: 4px;
+  color: var(--text-2);
+  font-size: 12px;
+  line-height: 1.5;
+}
+
+.docCode {
+  margin: 14px 0 0;
+  padding: 10px 12px;
+  overflow: hidden;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  background: var(--background);
+  color: var(--text);
+  font-family: var(--font-mono);
+  font-size: 11px;
+  line-height: 1.6;
+  white-space: pre-wrap;
+  word-break: break-word;
+}
+
+/* ------------------------------------------------------------- new tab */
+
+.newTab {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 22px;
+  padding: 24px;
+}
+
+.newTabSearch {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  width: min(100%, 360px);
+  height: 36px;
+  margin: 0;
+  padding-inline: 12px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  background: var(--background);
+  color: var(--text-2);
+  font-size: 12.5px;
+}
+
+.newTabPins {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 14px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.newTabPins li {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  color: var(--text-2);
+  font-size: 11px;
+}
+
+.newTabPins li span {
+  display: grid;
+  place-items: center;
+  width: 44px;
+  height: 44px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  background: var(--surface-2);
+  color: var(--text);
+}
+
+.inner .newTabPins svg {
+  width: 17px;
+  height: 17px;
 }
 
 /* ---------------------------------------------------------------- agent */
@@ -665,6 +822,17 @@
   }
 }
 
+@keyframes pageIn {
+  from {
+    opacity: 0;
+    transform: translateY(4px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
 @keyframes spin {
   to {
     transform: rotate(360deg);
@@ -828,6 +996,15 @@
   }
 
   .pulls li:nth-child(n + 4) {
+    display: none;
+  }
+
+  .doc {
+    padding: 14px;
+  }
+
+  .docSection:nth-of-type(n + 2),
+  .docCode {
     display: none;
   }
 }
