@@ -194,6 +194,23 @@
     }
   }
 
+  /* Grid cells pad like .gutter so their text lines up with section headings. */
+  .cell-pad {
+    padding: 28px 16px;
+  }
+
+  @media (min-width: 640px) {
+    .cell-pad {
+      padding: 32px;
+    }
+  }
+
+  @media (min-width: 1024px) {
+    .cell-pad {
+      padding: 36px 48px 40px;
+    }
+  }
+
   /* Cross markers where section hairlines meet the frame. */
   .cross {
     position: absolute;
@@ -646,4 +663,27 @@
     opacity: 1;
     transform: none;
   }
+}
+
+/* Changelog entries: hairline-separated items instead of bullets. */
+.changelog-list ul > li {
+  padding: 10px 0 10px 20px;
+  border-top: 1px solid var(--border);
+}
+
+.changelog-list ul > li + li {
+  margin-top: 0;
+}
+
+.changelog-list ul > li::before {
+  top: calc(10px + 0.82em);
+}
+
+.changelog-list ul > li:first-child {
+  border-top: 0;
+  padding-top: 0;
+}
+
+.changelog-list ul > li:first-child::before {
+  top: 0.82em;
 }
