@@ -7,11 +7,13 @@ All notable changes to Island are recorded here. The format follows
 
 The version lives in the `VERSION` file. Bump it with
 `python3 scripts/version.py bump minor` (or `major` / `patch`), which moves the
-Unreleased notes under the new version and refreshes the site. Merging a
+Unreleased notes under the new version. Merging a
 version bump to `main` tags the commit `vX.Y.Z` automatically. Versions before
 0.4.0 were never tagged; their entries are reconstructed from the git history.
 
 ## [Unreleased]
+
+## [0.5.0] - 2026-10-06
 
 ### Added
 
@@ -25,12 +27,41 @@ version bump to `main` tags the commit `vX.Y.Z` automatically. Versions before
   downloads the platform archive, verifies it against `SHA256SUMS.txt`, and installs it on
   "Restart to update" with a backup and automatic rollback. SemVer pre-releases are opt-in; build
   trees and read-only installs only report new versions.
+- Agent providers: choose the sidebar agent from the panel's title or Settings > Agent & tools —
+  Claude Code, Codex, OpenCode, Gemini CLI, Qwen Code, Goose, or a custom command. Each shows
+  whether its program was found on the `PATH`, with an install hint and docs link when it was not;
+  switching stops a running agent and starts a new chat with the new one. `ISLAND_AGENT_COMMAND`
+  still overrides the choice.
 
 ### Changed
 
+- The product site moved to its own repository,
+  [island-browser/site](https://github.com/island-browser/site), and is served at
+  https://island-browser.github.io/site/. It reads the version and these notes from this
+  repository when it builds; `scripts/version.py sync` no longer touches site pages.
+- The default Claude Code agent now runs `npx -y @agentclientprotocol/claude-agent-acp`, the
+  renamed successor of the deprecated `@zed-industries/claude-code-acp`. A saved command equal to
+  the old default switches to the Claude Code provider; any other saved command becomes the
+  custom provider.
 - New "Graphite" design language across the browser: neutral near-black and white surfaces,
   1px hairlines, a single blue accent, tighter radii (6/10), and a refined space palette; the
   space tint is now a faint cast on the sidebar instead of a colored wash.
+
+### Fixed
+
+- An agent command with unbalanced quotes is refused with "check its quotes" instead of being
+  handed to the login shell.
+- Native builds on every target again: a GCC `-Werror` warning in the command palette, an MSVC
+  parse error in a JSON test, the Windows arm64 runner's Visual Studio generator, and a macOS-only
+  false positive in the agent descriptor-leak test.
+- Windows builds: the agent tests compile with MSVC's conforming preprocessor and UTF-8 literals,
+  and the macOS/Linux update script always writes `/`-separated paths, also when generated on a
+  Windows host.
+- Windows packaging recognizes the sandbox build again: CEF's bootstrap `island_browser.exe`
+  does not name `island_browser.dll`, so the package step now checks that the DLL exports
+  `RunWinMain` instead.
+- Windows arm64 packaging no longer requires `dxcompiler.dll` and `dxil.dll`, which CEF ships
+  only for x64.
 
 ## [0.4.0] - 2026-10-06
 
@@ -104,7 +135,8 @@ version bump to `main` tags the commit `vX.Y.Z` automatically. Versions before
   Reload, popup rejection, and a clean shutdown through the CEF close lifecycle.
 - Pinned dependency vendoring (`scripts/setup_deps.sh`), packaging, and the product site.
 
-[Unreleased]: https://github.com/island-browser/island/compare/v0.4.0...HEAD
+[Unreleased]: https://github.com/island-browser/island/compare/v0.5.0...HEAD
+[0.5.0]: https://github.com/island-browser/island/releases/tag/v0.5.0
 [0.4.0]: https://github.com/island-browser/island/releases/tag/v0.4.0
 [0.3.0]: https://github.com/island-browser/island/commits/main
 [0.2.0]: https://github.com/island-browser/island/commits/main
