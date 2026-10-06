@@ -1,31 +1,40 @@
 import {
+  ArrowUp,
+  BookOpen,
+  CalendarDays,
   Check,
+  ChevronDown,
   ChevronLeft,
   ChevronRight,
+  FileText,
   GitPullRequest,
   Globe,
   LayoutGrid,
+  Mail,
+  MessagesSquare,
+  Network,
   Plus,
   RotateCw,
   Settings,
   Sparkles,
+  SquarePen,
   X,
 } from "lucide-react";
 
 import s from "./browser-mockup.module.css";
 
 const PINS = [
-  { letter: "G", tint: "var(--text)" },
-  { letter: "L", tint: "var(--space-purple)" },
-  { letter: "M", tint: "var(--space-coral)" },
-  { letter: "C", tint: "var(--space-amber)" },
+  { name: "Mail", Icon: Mail },
+  { name: "Calendar", Icon: CalendarDays },
+  { name: "Chat", Icon: MessagesSquare },
+  { name: "Notes", Icon: FileText },
 ];
 
 const TABS = [
-  { title: "Island — pull requests", active: true, icon: "pr" },
-  { title: "Agent Client Protocol", icon: "globe" },
-  { title: "MCP specification", icon: "globe" },
-  { title: "Streamable HTTP transport", icon: "globe" },
+  { title: "Island — pull requests", active: true, Icon: GitPullRequest },
+  { title: "Agent Client Protocol", Icon: BookOpen },
+  { title: "MCP specification", Icon: FileText },
+  { title: "Streamable HTTP transport", Icon: Network },
 ];
 
 const PULLS = [
@@ -64,20 +73,26 @@ export function BrowserMockup() {
           </div>
 
           <div className={s.pins}>
-            {PINS.map((p, i) => (
-              <span key={p.letter} className={`${s.pin} ${i === 0 ? s.pinActive : ""}`}>
-                <b style={{ color: p.tint }}>{p.letter}</b>
+            {PINS.map(({ name, Icon }, i) => (
+              <span key={name} className={`${s.pin} ${i === 0 ? s.pinActive : ""}`}>
+                <Icon />
               </span>
             ))}
           </div>
 
-          <p className={s.groupLabel}>Today</p>
+          <p className={s.groupLabel}>
+            <i style={{ background: "var(--space-blue)" }} />
+            <span>Work</span>
+            <em>4</em>
+          </p>
           <ul className={s.tabs}>
-            {TABS.map((t) => (
-              <li key={t.title} className={`${s.tab} ${t.active ? s.tabActive : ""}`}>
-                <span className={s.favicon}>{t.icon === "pr" ? <GitPullRequest /> : <Globe />}</span>
-                <span className={s.tabTitle}>{t.title}</span>
-                {t.active && <X className={s.tabClose} />}
+            {TABS.map(({ title, active, Icon }) => (
+              <li key={title} className={`${s.tab} ${active ? s.tabActive : ""}`}>
+                <span className={s.favicon}>
+                  <Icon />
+                </span>
+                <span className={s.tabTitle}>{title}</span>
+                {active && <X className={s.tabClose} />}
               </li>
             ))}
             <li className={`${s.tab} ${s.tabNew}`}>
@@ -141,11 +156,14 @@ export function BrowserMockup() {
 
         <aside className={s.agent}>
           <div className={s.agentHead}>
-            <span className={s.agentTitle}>
+            <span className={s.provider}>
               <Sparkles />
-              Agent
+              Claude Code
+              <ChevronDown className={s.chevron} />
             </span>
-            <span className={s.agentModel}>claude-code-acp</span>
+            <span className={s.headIcon}>
+              <SquarePen />
+            </span>
           </div>
           <div className={s.thread}>
             <p className={s.context}>
@@ -165,14 +183,19 @@ export function BrowserMockup() {
               Two: <em>MCP specification</em> and <em>Streamable HTTP</em>. Want them in a split?
             </p>
           </div>
-          <div className={s.input}>
+          <div className={s.composer}>
             <span className={s.placeholder}>
-              Ask the agent<span className={s.caret} />
+              Ask anything, or tell it what to do<span className={s.caret} />
             </span>
-            <span className={s.inputKeys}>
-              <kbd>⌘</kbd>
-              <kbd>J</kbd>
-            </span>
+            <div className={s.composerRow}>
+              <span className={s.contextChip}>
+                <Globe />
+                <span>pull requests</span>
+              </span>
+              <span className={s.send}>
+                <ArrowUp />
+              </span>
+            </div>
           </div>
         </aside>
       </div>

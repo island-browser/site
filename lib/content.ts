@@ -111,8 +111,22 @@ export const mcpBridgeConfig = `{
   }
 }`;
 
-export const acpCommand = `# Settings → Agent & tools, or before launching Island:
-$ export ISLAND_AGENT_COMMAND="npx -y @zed-industries/claude-code-acp"
+/** ACP agents the sidebar can run, as Island's provider presets launch them. */
+export const acpProviders = [
+  { id: "claude", name: "Claude Code", command: "npx -y @agentclientprotocol/claude-agent-acp", needs: "npx · Claude login" },
+  { id: "codex", name: "Codex", command: "npx -y @agentclientprotocol/codex-acp", needs: "npx · ChatGPT or API key" },
+  { id: "opencode", name: "OpenCode", command: "opencode acp", needs: "npm i -g opencode-ai" },
+  { id: "gemini", name: "Gemini CLI", command: "gemini --acp", needs: "npm i -g @google/gemini-cli" },
+  { id: "qwen", name: "Qwen Code", command: "qwen --acp", needs: "npm i -g @qwen-code/qwen-code" },
+  { id: "goose", name: "Goose", command: "goose acp", needs: "goose CLI" },
+] as const;
+
+export const acpCommand = `# Pick a provider in the agent panel or Settings → Agent & tools.
+# Each one is an ACP agent Island starts as a local program:
+${acpProviders.map((p) => `#   ${p.name.padEnd(12)} ${p.command}`).join("\n")}
+
+# Or run any other ACP agent:
+$ export ISLAND_AGENT_COMMAND="my-agent --acp"
 $ open build/src/main/island_browser.app`;
 
 export const buildSnippet = `$ git clone ${repoUrl} && cd island

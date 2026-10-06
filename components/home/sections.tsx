@@ -6,6 +6,7 @@ import { Keys, KeyList } from "@/components/keys";
 import { Band, SectionHeader } from "@/components/section";
 import {
   acpCommand,
+  acpProviders,
   mcpBridgeConfig,
   mcpHttpConfig,
   shortcuts,
@@ -118,12 +119,12 @@ export function Agents() {
     },
     {
       id: "acp",
-      label: "ACP agent command",
+      label: "ACP agents",
       short: "ACP",
       filename: "the agent that runs in the sidebar",
       lang: "shell" as const,
       code: acpCommand,
-      note: "Any Agent Client Protocol agent works. Island hands it the browser tools automatically and tells it which tab you are looking at.",
+      note: "Claude Code, Codex, OpenCode, Gemini CLI, Qwen Code, Goose — or any Agent Client Protocol agent. Island hands every one the browser tools and tells it which tab you are looking at.",
     },
   ];
 
@@ -151,6 +152,26 @@ export function Agents() {
         <div className="gutter py-10 sm:py-12 lg:border-r lg:border-line">
           <div className="lg:sticky lg:top-24" data-reveal>
             <AgentTabs tabs={tabs} />
+            <div className="mt-8">
+              <div className="mb-3 flex items-baseline justify-between gap-4">
+                <h3 className="h3">Bring your agent</h3>
+                <span className="font-mono text-xs text-fg-2">Agent Client Protocol</span>
+              </div>
+              <ul className="divide-y divide-line overflow-hidden rounded-[10px] border border-line bg-surface">
+                {acpProviders.map((p) => (
+                  <li
+                    key={p.id}
+                    className="flex min-w-0 flex-col gap-1 px-4 py-3 sm:flex-row sm:items-center sm:justify-between sm:gap-4"
+                  >
+                    <span className="flex min-w-0 flex-col">
+                      <span className="text-[13.5px] font-medium">{p.name}</span>
+                      <span className="font-mono text-[11px] text-fg-2">{p.needs}</span>
+                    </span>
+                    <code className="min-w-0 break-all font-mono text-[11.5px] text-fg sm:text-right">{p.command}</code>
+                  </li>
+                ))}
+              </ul>
+            </div>
           </div>
         </div>
         <div className="gutter py-10 sm:py-12" data-reveal>
