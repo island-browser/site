@@ -8,11 +8,11 @@ export const siteConfig = {
   /** The browser repository: CHANGELOG.md, VERSION, DESIGN.md, and releases come from here. */
   repo: "island",
   /** This website's repository. */
-  siteRepo: "island-site",
+  siteRepo: "site",
   /** Branch the build-time data is read from. */
   branch: "main",
   /** Canonical public URL (overridable with NEXT_PUBLIC_SITE_URL). */
-  defaultSiteUrl: "https://island-browser.github.io/island-site",
+  defaultSiteUrl: "https://island-browser.github.io/site",
 } as const;
 
 export const repoSlug = `${siteConfig.owner}/${siteConfig.repo}`;

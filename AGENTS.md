@@ -8,7 +8,7 @@ This block is written and re-added by `next dev` — verify at `node_modules/nex
 
 <!-- END:nextjs-agent-rules -->
 
-# island-site
+# island-browser/site
 
 Product website for the Island browser: Next.js App Router, static export (`out/`), Tailwind v4.
 

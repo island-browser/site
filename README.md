@@ -1,9 +1,9 @@
-# island-site
+# Island website (`island-browser/site`)
 
 The product website for [Island](https://github.com/island-browser/island), a calm native desktop
 browser built on CEF with a built-in AI agent. It is a static Next.js site (App Router,
 `output: "export"`) styled with Tailwind CSS v4 and the Graphite design tokens from Island's
-`DESIGN.md`, deployed to GitHub Pages at <https://island-browser.github.io/island-site>.
+`DESIGN.md`, deployed to GitHub Pages at <https://island-browser.github.io/site>.
 
 No analytics, no trackers, no remote fonts or images: Geist and Geist Mono are self-hosted from the
 [`geist`](https://www.npmjs.com/package/geist) package.
@@ -31,24 +31,24 @@ npm run build        # static export into out/
 ```
 
 To check the export under the GitHub Pages base path, build with it and serve `out/` mounted at
-`/island-site`:
+`/site`:
 
 ```bash
-NEXT_PUBLIC_BASE_PATH=/island-site npm run build
-mkdir -p /tmp/pages && rm -rf /tmp/pages/island-site && cp -r out /tmp/pages/island-site
-python3 -m http.server 4200 --directory /tmp/pages   # open http://localhost:4200/island-site/
+NEXT_PUBLIC_BASE_PATH=/site npm run build
+mkdir -p /tmp/pages && rm -rf /tmp/pages/site && cp -r out /tmp/pages/site
+python3 -m http.server 4200 --directory /tmp/pages   # open http://localhost:4200/site/
 ```
 
 ### Configuration
 
-| Variable                | Default                                        | Purpose                                   |
-| ----------------------- | ---------------------------------------------- | ----------------------------------------- |
-| `NEXT_PUBLIC_BASE_PATH` | empty                                          | Path prefix; `/island-site` on Pages      |
-| `NEXT_PUBLIC_SITE_URL`  | `https://island-browser.github.io/island-site` | Canonical URLs, sitemap, OpenGraph        |
-| `ISLAND_REPO_TOKEN`     | unset                                          | Read token for the browser repo           |
-| `GITHUB_TOKEN`          | unset                                          | Fallback token for GitHub requests        |
-| `ISLAND_DATA_OFFLINE`   | unset                                          | `1` skips the network in `fetch-data`     |
-| `ISLAND_LOCAL_CHECKOUT` | `../island`                                    | Sibling checkout used as a local fallback |
+| Variable                | Default                                 | Purpose                                   |
+| ----------------------- | --------------------------------------- | ----------------------------------------- |
+| `NEXT_PUBLIC_BASE_PATH` | empty                                   | Path prefix; `/site` on Pages             |
+| `NEXT_PUBLIC_SITE_URL`  | `https://island-browser.github.io/site` | Canonical URLs, sitemap, OpenGraph        |
+| `ISLAND_REPO_TOKEN`     | unset                                   | Read token for the browser repo           |
+| `GITHUB_TOKEN`          | unset                                   | Fallback token for GitHub requests        |
+| `ISLAND_DATA_OFFLINE`   | unset                                   | `1` skips the network in `fetch-data`     |
+| `ISLAND_LOCAL_CHECKOUT` | `../island`                             | Sibling checkout used as a local fallback |
 
 Repository coordinates (owner, repo names, branch, default site URL) live in one place:
 `site.config.ts`.
@@ -83,13 +83,13 @@ as CSS variables. `npm run check:tokens` reads the fenced `design-tokens` block 
 ## Deploy
 
 `.github/workflows/deploy.yml` lints, checks the tokens, builds with
-`NEXT_PUBLIC_BASE_PATH=/island-site`, and deploys `out/` with GitHub Pages. It runs on every push to
+`NEXT_PUBLIC_BASE_PATH=/site`, and deploys `out/` with GitHub Pages. It runs on every push to
 `main`, daily at 06:17 UTC (to pick up new releases), on `workflow_dispatch`, and on a
 `repository_dispatch` event of type `island-release`, which the browser repo can send after
 publishing a release:
 
 ```bash
-gh api repos/island-browser/island-site/dispatches -f event_type=island-release
+gh api repos/island-browser/site/dispatches -f event_type=island-release
 ```
 
 One-time setup: in the repository settings, set **Pages → Source** to **GitHub Actions**, and add

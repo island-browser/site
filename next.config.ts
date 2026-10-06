@@ -1,6 +1,6 @@
 import type { NextConfig } from "next";
 
-// GitHub Pages serves this project site from /island-site; locally it is served from the root.
+// GitHub Pages serves this project site from /site (repository island-browser/site); locally it is served from the root.
 const basePath = (process.env.NEXT_PUBLIC_BASE_PATH ?? "").replace(/\/+$/, "");
 
 const nextConfig: NextConfig = {

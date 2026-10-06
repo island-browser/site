@@ -8,7 +8,7 @@ on:
   schedule:
     - cron: "17 6 * * *"
   # The browser repo can trigger a rebuild right after it publishes a release:
-  #   gh api repos/island-browser/island-site/dispatches -f event_type=island-release
+  #   gh api repos/island-browser/site/dispatches -f event_type=island-release
   repository_dispatch:
     types:
       - island-release
@@ -57,8 +57,8 @@ jobs:
       - name: Build the static export
         run: npm run build
         env:
-          NEXT_PUBLIC_BASE_PATH: /island-site
-          NEXT_PUBLIC_SITE_URL: https://island-browser.github.io/island-site
+          NEXT_PUBLIC_BASE_PATH: /site
+          NEXT_PUBLIC_SITE_URL: https://island-browser.github.io/site
           NEXT_TELEMETRY_DISABLED: "1"
           ISLAND_REPO_TOKEN: ${{ secrets.ISLAND_REPO_TOKEN }}
           GITHUB_TOKEN: ${{ github.token }}
