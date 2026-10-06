@@ -1,0 +1,181 @@
+/* ------------------------------------------------------------------ hero */
+
+.heroCopy > * {
+  animation: rise var(--motion-enter) var(--ease-out) both;
+}
+
+.heroCopy > :nth-child(2) {
+  animation-delay: 60ms;
+}
+
+.heroCopy > :nth-child(3) {
+  animation-delay: 120ms;
+}
+
+.heroCopy > :nth-child(n + 4) {
+  animation-delay: 180ms;
+}
+
+.announce {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  max-width: 100%;
+  height: 32px;
+  padding: 0 10px 0 5px;
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  background: var(--surface);
+  font-size: 13px;
+  transition: border-color var(--motion-fast) var(--ease-out);
+}
+
+.announce > span:nth-child(2) {
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+.announce :global(.tag) {
+  border-radius: 999px;
+}
+
+.announce:hover {
+  border-color: var(--border-strong);
+}
+
+.snippet {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  max-width: 100%;
+  height: 40px;
+  margin-top: 28px;
+  padding: 0 4px 0 14px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  background: var(--surface);
+  font-family: var(--font-mono);
+  font-size: 13px;
+}
+
+/* The stage behind the product window: a faint field of cross markers (an SVG mask, no gradients). */
+.stage {
+  background: var(--surface-2);
+}
+
+:global(.dark) .stage {
+  background: color-mix(in srgb, var(--surface) 70%, var(--background));
+}
+
+.stage::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: var(--border-strong);
+  opacity: 0.55;
+  -webkit-mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='48' height='48'%3E%3Cpath d='M24 20v8M20 24h8' stroke='black' stroke-width='1'/%3E%3C/svg%3E");
+  mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='48' height='48'%3E%3Cpath d='M24 20v8M20 24h8' stroke='black' stroke-width='1'/%3E%3C/svg%3E");
+  -webkit-mask-size: 48px 48px;
+  mask-size: 48px 48px;
+  -webkit-mask-position: center top;
+  mask-position: center top;
+  pointer-events: none;
+}
+
+.mockupIn {
+  animation: rise var(--motion-reveal) var(--ease-out) 240ms both;
+}
+
+@keyframes rise {
+  from {
+    opacity: 0;
+    transform: translateY(14px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+/* ------------------------------------------------------------- first run */
+
+.welcome {
+  width: 100%;
+  max-width: 420px;
+  padding: 20px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  background: var(--surface);
+  box-shadow: var(--shadow-window);
+  user-select: none;
+}
+
+.segmented {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 2px;
+  margin-top: 16px;
+  padding: 2px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  background: var(--surface-2);
+  font-size: 12px;
+  text-align: center;
+}
+
+.segmented span {
+  height: 26px;
+  border-radius: 4px;
+  color: var(--text-2);
+  line-height: 26px;
+}
+
+.segmented .segActive {
+  background: var(--surface);
+  color: var(--text);
+  font-weight: 500;
+  box-shadow: 0 0 0 1px var(--border);
+}
+
+.importRows {
+  margin: 12px 0 0;
+  padding: 0;
+  border-top: 1px solid var(--border);
+  list-style: none;
+}
+
+.importRows li {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  height: 36px;
+  border-bottom: 1px solid var(--border);
+  font-size: 12.5px;
+}
+
+.box {
+  display: grid;
+  place-items: center;
+  width: 15px;
+  height: 15px;
+  border: 1px solid var(--border-strong);
+  border-radius: 4px;
+  font-size: 10px;
+  line-height: 1;
+}
+
+.boxOn {
+  border-color: var(--text);
+  background: var(--text);
+  color: var(--background);
+}
+
+/* ---------------------------------------------------------- availability */
+
+.platform {
+  padding: 20px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  background: var(--surface);
+}
