@@ -13,6 +13,113 @@ version bump to `main` tags the commit `vX.Y.Z` automatically. Versions before
 
 ## [Unreleased]
 
+## [0.6.2] - 2026-10-15
+
+### Fixed
+
+- Compiled the Windows build as UTF-8, so window titles and the command palette no longer
+  show garbled dashes and non-ASCII download names keep their bytes in the tests.
+
+## [0.6.1] - 2026-10-15
+
+### Fixed
+
+- Fixed the Linux build by using CEF's unambiguous window-open disposition type in popup and
+  new-tab callback signatures.
+
+## [0.6.0] - 2026-10-15
+
+### Added
+
+- Start page **Research** mode: Enter sends the question to the configured agent with a prompt to research it with Island's browser tools (a new space named after the question, several sources in tabs, compared) and to finish with a Markdown report that cites every claim. The final report opens in a new **Report** tab (local page, shared safe Markdown renderer, links open in new tabs) with Copy Markdown, Save as .md... and Continue in agent panel. Clear messages for a missing agent (with an Open Settings button), a busy agent, and Cancel.
+  Reports list: persisted in `reports.json` under the support directory, listed in Settings > Reports and in Cmd/Ctrl+K as REPORT rows.
+  Dev capture actions `research:<question>` and `open_report`.
+- Native ad and tracker blocking powered by Brave's `adblock` Rust engine. Island refreshes
+  EasyList and EasyPrivacy in the background at most every four days, keeps working from its
+  cached lists when an update fails, supports independent controls and a per-site allowlist in
+  Settings > Privacy, and reports per-tab blocked-request counts in All tabs.
+- Tab sleep: a tab you have not used for 15, 30 (default) or 60 minutes (Settings → Tabs, or
+  Never) releases its browser to free memory. It keeps its URL, title, favicon and scroll
+  position, shows dimmed in the sidebar and the icon rail, and reloads where you left off when you
+  select it. Pinned tabs, the tab on screen, split-view partners, tabs playing audio and tabs with
+  unsaved form input never sleep (a page script checks the last three just before closing). The
+  command palette gains "Sleep inactive tabs now".
+- Peek: Cmd/Ctrl+click or middle-click on a link, the "Open in peek" context-menu item, and
+  links the page opens in a new tab show the page in a floating card over the current one, with
+  the address, "Open as tab" (reopens it as a real tab of the active space) and "Close"; Escape
+  closes it. The card is an overlay that exists only while it is open and covers only the card.
+- Find in page (Cmd/Ctrl+F, next/previous with Enter / Shift+Enter or Cmd/Ctrl+G / +Shift+G, Escape
+  closes): a small bar at the top-right of the page card with the "n of m" count and a match-case
+  toggle, built on `CefBrowserHost::Find` and `CefFindHandler::OnFindResult`. The bar is an overlay
+  that exists only while open, and it closes when the tab changes.
+- Reader view (Cmd/Ctrl+Alt+R, or the "Aa" button in the address pill): a compact Readability-style
+  script reads the article out of the page, and Island shows it in its own reader document (Geist,
+  Graphite tokens; size, width and Auto/Light/Sepia/Dark controls, remembered in prefs). Toggling
+  again returns to the original page. Nothing external is fetched; all four find/reader actions
+  appear in Settings and the macOS Browser menu, and Settings > Reader configures the default
+  text size, page width and color theme.
+- On-device browsing history now records http/https page addresses and titles (never local,
+  credentialed, data, or future private-mode pages), keeps the newest 50,000 visits, and searches
+  them from Cmd/Ctrl+K alongside open tabs and bookmarks. The last typed word matches as a prefix. Results are URL-deduplicated, combine
+  BM25/recency with repeat-visit frequency, and stay entirely on the device. Settings can stop
+  remembering new visits or clear the persisted history.
+- Cmd/Ctrl+B now collapses the sidebar to a 52 DIP icon rail instead of hiding it: one square
+  button per tab of the active space (pinned tabs first, the active tab highlighted like the
+  selected row, the page title as tooltip and accessible name), a "+" new-tab button and the
+  spaces as colored dots at the bottom, and a scrolling list when the tabs outgrow the window.
+  The choice is saved and restored on the next launch. Cmd/Ctrl+L from the icon rail expands the
+  sidebar for the length of the edit. The macOS hover reveal and the edge sliver are gone, since
+  the rail is always there. Favicons are fetched at 16 DIP only for web pages, ignored when
+  stale, and cleared when a tab leaves the site.
+- More keyboard shortcuts, all listed and rebindable in Settings: Ctrl+Tab and Ctrl+Shift+Tab
+  switch tabs (Control is now its own modifier on macOS), Cmd+9 selects the last tab, Cmd+Shift+T
+  reopens the last closed tab, Cmd+=, Cmd+-, and Cmd+0 zoom the page, Cmd+Shift+R reloads ignoring
+  the cache, Cmd+. and Escape stop loading (Escape only when no overlay is open), Cmd+Option+Down
+  and Cmd+Option+Up move between spaces, and Cmd+Shift+C copies the tab's URL (macOS only for now).
+- Island has its own start page, shown on launch and in every new tab: one prominent input with a
+  Search / Ask agent switch. Search opens the results on your search engine in that tab; Ask agent
+  opens the agent panel and sends the text as a task, exactly as if typed there. The last-used
+  mode is remembered. The page is a local document and requests nothing until you submit.
+- The address bar searches when the text is not an address: `google`, `weather in oslo` or
+  `what is 2+2` open a Google results page instead of showing "Enter an absolute http or https
+  address." Bare hosts (`example.com`) open over https. Explicit schemes are
+  validated exactly as before. localhost and IP addresses open over http (dev servers rarely speak
+  TLS); domain names open over https.
+- Settings has a Search section to choose the engine: Google (default), DuckDuckGo or Yandex.
+- Agent replies in the agent panel render as Markdown: headings, bold/italic, inline code, fenced
+  code blocks, lists, links, blockquotes and tables. The renderer escapes everything the model
+  sends, only links to http, https and mailto, and falls back to plain text.
+
+### Changed
+
+- Downloads are saved straight into your Downloads folder under the suggested name, without a
+  dialog; an existing file is never overwritten (`name (1).ext`, `name (2).ext`, ...). Alloy
+  style cancels downloads nobody handles, so Island now handles them itself.
+- Site permission requests (camera, microphone, location, notifications) are declined, because
+  Alloy style has no built-in prompt and Island does not show one yet.
+- Sidebar redesigned to the Graphite spec: ghost back/forward and footer buttons, the address as
+  one outlined pill (site glyph, field, reload) that takes the accent outline while focused, tabs
+  as rows on the sidebar with a hairline-outlined selected row, one 32 DIP control height and an
+  even 8 DIP rhythm, Geist instead of mono in the address field.
+- The first-run welcome card is a real card: title and lede, a segmented System/Light/Dark control,
+  outlined import rows, a wrapped note for unreadable browsers instead of an ellipsized line, and
+  Import / Start browsing buttons.
+- The start page is styled with the design tokens and the Geist stack (still a local `data:`
+  document with no external requests).
+
+### Fixed
+
+- Clicking a tab or space button no longer destroys the pressed button from inside its own
+  callback (a use-after-free in CEF event dispatch that could crash the browser); the action now
+  runs right after the callback returns.
+- Island no longer crashes with "quit unexpectedly" when you switch to another app or window (and on
+  quit). The window and every browser view now use CEF's Alloy runtime style; Island hosts several
+  browser views in one window, which CEF supports only for Alloy style views.
+- The sidebar no longer shows every control as its own light box: CEF wipes custom view colors
+  when a theme change lands, and only some chrome views repainted afterwards. Every chrome view now
+  reports the reset and the chrome repaints from the design tokens, which also removes the white
+  panel behind the tab list.
+
 ## [0.5.1] - 2026-10-06
 
 ### Added
@@ -149,7 +256,10 @@ version bump to `main` tags the commit `vX.Y.Z` automatically. Versions before
   Reload, popup rejection, and a clean shutdown through the CEF close lifecycle.
 - Pinned dependency vendoring (`scripts/setup_deps.sh`), packaging, and the product site.
 
-[Unreleased]: https://github.com/island-browser/island/compare/v0.5.1...HEAD
+[Unreleased]: https://github.com/island-browser/island/compare/v0.6.2...HEAD
+[0.6.2]: https://github.com/island-browser/island/releases/tag/v0.6.2
+[0.6.1]: https://github.com/island-browser/island/releases/tag/v0.6.1
+[0.6.0]: https://github.com/island-browser/island/releases/tag/v0.6.0
 [0.5.1]: https://github.com/island-browser/island/releases/tag/v0.5.1
 [0.5.0]: https://github.com/island-browser/island/releases/tag/v0.5.0
 [0.4.0]: https://github.com/island-browser/island/releases/tag/v0.4.0

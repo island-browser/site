@@ -1,5 +1,153 @@
 [
   {
+    "tag_name": "v0.6.2",
+    "name": "Island 0.6.2 (unsigned)",
+    "prerelease": true,
+    "published_at": "2026-10-15T21:30:49Z",
+    "html_url": "https://github.com/island-browser/island/releases/tag/v0.6.2",
+    "assets": [
+      {
+        "name": "island_browser-0.6.2-linux64.deb",
+        "size": 246906468,
+        "browser_download_url": "https://github.com/island-browser/island/releases/download/v0.6.2/island_browser-0.6.2-linux64.deb"
+      },
+      {
+        "name": "island_browser-0.6.2-linux64.tar.gz",
+        "size": 351995027,
+        "browser_download_url": "https://github.com/island-browser/island/releases/download/v0.6.2/island_browser-0.6.2-linux64.tar.gz"
+      },
+      {
+        "name": "island_browser-0.6.2-linuxarm64.deb",
+        "size": 294766616,
+        "browser_download_url": "https://github.com/island-browser/island/releases/download/v0.6.2/island_browser-0.6.2-linuxarm64.deb"
+      },
+      {
+        "name": "island_browser-0.6.2-linuxarm64.tar.gz",
+        "size": 454424266,
+        "browser_download_url": "https://github.com/island-browser/island/releases/download/v0.6.2/island_browser-0.6.2-linuxarm64.tar.gz"
+      },
+      {
+        "name": "island_browser-0.6.2-macosarm64.dmg",
+        "size": 140662028,
+        "browser_download_url": "https://github.com/island-browser/island/releases/download/v0.6.2/island_browser-0.6.2-macosarm64.dmg"
+      },
+      {
+        "name": "island_browser-0.6.2-macosarm64.zip",
+        "size": 139012427,
+        "browser_download_url": "https://github.com/island-browser/island/releases/download/v0.6.2/island_browser-0.6.2-macosarm64.zip"
+      },
+      {
+        "name": "island_browser-0.6.2-macosx64.dmg",
+        "size": 150852249,
+        "browser_download_url": "https://github.com/island-browser/island/releases/download/v0.6.2/island_browser-0.6.2-macosx64.dmg"
+      },
+      {
+        "name": "island_browser-0.6.2-macosx64.zip",
+        "size": 149246036,
+        "browser_download_url": "https://github.com/island-browser/island/releases/download/v0.6.2/island_browser-0.6.2-macosx64.zip"
+      },
+      {
+        "name": "island_browser-0.6.2-windows64-setup.exe",
+        "size": 135511728,
+        "browser_download_url": "https://github.com/island-browser/island/releases/download/v0.6.2/island_browser-0.6.2-windows64-setup.exe"
+      },
+      {
+        "name": "island_browser-0.6.2-windows64.zip",
+        "size": 188952446,
+        "browser_download_url": "https://github.com/island-browser/island/releases/download/v0.6.2/island_browser-0.6.2-windows64.zip"
+      },
+      {
+        "name": "island_browser-0.6.2-windowsarm64-setup.exe",
+        "size": 121627022,
+        "browser_download_url": "https://github.com/island-browser/island/releases/download/v0.6.2/island_browser-0.6.2-windowsarm64-setup.exe"
+      },
+      {
+        "name": "island_browser-0.6.2-windowsarm64.zip",
+        "size": 181003299,
+        "browser_download_url": "https://github.com/island-browser/island/releases/download/v0.6.2/island_browser-0.6.2-windowsarm64.zip"
+      },
+      {
+        "name": "SHA256SUMS.txt",
+        "size": 1234,
+        "browser_download_url": "https://github.com/island-browser/island/releases/download/v0.6.2/SHA256SUMS.txt"
+      }
+    ]
+  },
+  {
+    "tag_name": "nightly",
+    "name": "Island 0.6.2 (nightly, unsigned)",
+    "prerelease": true,
+    "published_at": "2026-10-15T21:30:49Z",
+    "html_url": "https://github.com/island-browser/island/releases/tag/nightly",
+    "assets": [
+      {
+        "name": "island_browser-0.6.2-linux64.deb",
+        "size": 246906468,
+        "browser_download_url": "https://github.com/island-browser/island/releases/download/nightly/island_browser-0.6.2-linux64.deb"
+      },
+      {
+        "name": "island_browser-0.6.2-linux64.tar.gz",
+        "size": 351995027,
+        "browser_download_url": "https://github.com/island-browser/island/releases/download/nightly/island_browser-0.6.2-linux64.tar.gz"
+      },
+      {
+        "name": "island_browser-0.6.2-linuxarm64.deb",
+        "size": 294766616,
+        "browser_download_url": "https://github.com/island-browser/island/releases/download/nightly/island_browser-0.6.2-linuxarm64.deb"
+      },
+      {
+        "name": "island_browser-0.6.2-linuxarm64.tar.gz",
+        "size": 454424266,
+        "browser_download_url": "https://github.com/island-browser/island/releases/download/nightly/island_browser-0.6.2-linuxarm64.tar.gz"
+      },
+      {
+        "name": "island_browser-0.6.2-macosarm64.dmg",
+        "size": 140662028,
+        "browser_download_url": "https://github.com/island-browser/island/releases/download/nightly/island_browser-0.6.2-macosarm64.dmg"
+      },
+      {
+        "name": "island_browser-0.6.2-macosarm64.zip",
+        "size": 139012427,
+        "browser_download_url": "https://github.com/island-browser/island/releases/download/nightly/island_browser-0.6.2-macosarm64.zip"
+      },
+      {
+        "name": "island_browser-0.6.2-macosx64.dmg",
+        "size": 150852249,
+        "browser_download_url": "https://github.com/island-browser/island/releases/download/nightly/island_browser-0.6.2-macosx64.dmg"
+      },
+      {
+        "name": "island_browser-0.6.2-macosx64.zip",
+        "size": 149246036,
+        "browser_download_url": "https://github.com/island-browser/island/releases/download/nightly/island_browser-0.6.2-macosx64.zip"
+      },
+      {
+        "name": "island_browser-0.6.2-windows64-setup.exe",
+        "size": 135511728,
+        "browser_download_url": "https://github.com/island-browser/island/releases/download/nightly/island_browser-0.6.2-windows64-setup.exe"
+      },
+      {
+        "name": "island_browser-0.6.2-windows64.zip",
+        "size": 188952446,
+        "browser_download_url": "https://github.com/island-browser/island/releases/download/nightly/island_browser-0.6.2-windows64.zip"
+      },
+      {
+        "name": "island_browser-0.6.2-windowsarm64-setup.exe",
+        "size": 121627022,
+        "browser_download_url": "https://github.com/island-browser/island/releases/download/nightly/island_browser-0.6.2-windowsarm64-setup.exe"
+      },
+      {
+        "name": "island_browser-0.6.2-windowsarm64.zip",
+        "size": 181003299,
+        "browser_download_url": "https://github.com/island-browser/island/releases/download/nightly/island_browser-0.6.2-windowsarm64.zip"
+      },
+      {
+        "name": "SHA256SUMS.txt",
+        "size": 1234,
+        "browser_download_url": "https://github.com/island-browser/island/releases/download/nightly/SHA256SUMS.txt"
+      }
+    ]
+  },
+  {
     "tag_name": "v0.5.1",
     "name": "Island 0.5.1 (unsigned)",
     "prerelease": true,
@@ -114,80 +262,6 @@
         "name": "SHA256SUMS.txt",
         "size": 614,
         "browser_download_url": "https://github.com/island-browser/island/releases/download/v0.5.0/SHA256SUMS.txt"
-      }
-    ]
-  },
-  {
-    "tag_name": "nightly",
-    "name": "Island 0.5.1 (nightly, unsigned)",
-    "prerelease": true,
-    "published_at": "2026-10-06T22:25:17Z",
-    "html_url": "https://github.com/island-browser/island/releases/tag/nightly",
-    "assets": [
-      {
-        "name": "island_browser-0.5.1-linux64.deb",
-        "size": 245421960,
-        "browser_download_url": "https://github.com/island-browser/island/releases/download/nightly/island_browser-0.5.1-linux64.deb"
-      },
-      {
-        "name": "island_browser-0.5.1-linux64.tar.gz",
-        "size": 349989087,
-        "browser_download_url": "https://github.com/island-browser/island/releases/download/nightly/island_browser-0.5.1-linux64.tar.gz"
-      },
-      {
-        "name": "island_browser-0.5.1-linuxarm64.deb",
-        "size": 293313156,
-        "browser_download_url": "https://github.com/island-browser/island/releases/download/nightly/island_browser-0.5.1-linuxarm64.deb"
-      },
-      {
-        "name": "island_browser-0.5.1-linuxarm64.tar.gz",
-        "size": 452518163,
-        "browser_download_url": "https://github.com/island-browser/island/releases/download/nightly/island_browser-0.5.1-linuxarm64.tar.gz"
-      },
-      {
-        "name": "island_browser-0.5.1-macosarm64.dmg",
-        "size": 139270958,
-        "browser_download_url": "https://github.com/island-browser/island/releases/download/nightly/island_browser-0.5.1-macosarm64.dmg"
-      },
-      {
-        "name": "island_browser-0.5.1-macosarm64.zip",
-        "size": 137639015,
-        "browser_download_url": "https://github.com/island-browser/island/releases/download/nightly/island_browser-0.5.1-macosarm64.zip"
-      },
-      {
-        "name": "island_browser-0.5.1-macosx64.dmg",
-        "size": 149397626,
-        "browser_download_url": "https://github.com/island-browser/island/releases/download/nightly/island_browser-0.5.1-macosx64.dmg"
-      },
-      {
-        "name": "island_browser-0.5.1-macosx64.zip",
-        "size": 147771059,
-        "browser_download_url": "https://github.com/island-browser/island/releases/download/nightly/island_browser-0.5.1-macosx64.zip"
-      },
-      {
-        "name": "island_browser-0.5.1-windows64-setup.exe",
-        "size": 132991793,
-        "browser_download_url": "https://github.com/island-browser/island/releases/download/nightly/island_browser-0.5.1-windows64-setup.exe"
-      },
-      {
-        "name": "island_browser-0.5.1-windows64.zip",
-        "size": 183813542,
-        "browser_download_url": "https://github.com/island-browser/island/releases/download/nightly/island_browser-0.5.1-windows64.zip"
-      },
-      {
-        "name": "island_browser-0.5.1-windowsarm64-setup.exe",
-        "size": 117602451,
-        "browser_download_url": "https://github.com/island-browser/island/releases/download/nightly/island_browser-0.5.1-windowsarm64-setup.exe"
-      },
-      {
-        "name": "island_browser-0.5.1-windowsarm64.zip",
-        "size": 173590288,
-        "browser_download_url": "https://github.com/island-browser/island/releases/download/nightly/island_browser-0.5.1-windowsarm64.zip"
-      },
-      {
-        "name": "SHA256SUMS.txt",
-        "size": 1234,
-        "browser_download_url": "https://github.com/island-browser/island/releases/download/nightly/SHA256SUMS.txt"
       }
     ]
   }
