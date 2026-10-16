@@ -1,0 +1,284 @@
+/* Direction 3 prototype: Graphite neutrals, Geist, plan-graph structure. Branch colors come from
+   design-tokens-native and always sit next to their "Branch X" label. */
+
+.root {
+  --branch-A: #0A64D8;
+  --branch-B: #8E44AD;
+  --branch-C: #C25400;
+  --branch-D: #1F8A70;
+  --dots: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24'%3E%3Ccircle cx='1' cy='1' r='1' fill='%23888888' fill-opacity='0.35'/%3E%3C/svg%3E");
+
+  position: relative;
+  margin-inline: auto;
+  max-width: 1200px;
+  border-inline: 1px solid var(--border);
+}
+
+:global(.dark) .root {
+  --branch-A: #0A84FF;
+  --branch-B: #BF5AF2;
+  --branch-C: #FF9F0A;
+  --branch-D: #40C8A0;
+}
+
+.mono,
+.kicker {
+  font-family: var(--font-mono);
+  font-size: 12px;
+  letter-spacing: 0.04em;
+  color: var(--text-2);
+}
+
+.kicker {
+  display: block;
+  font-size: 10.5px;
+  text-transform: uppercase;
+}
+
+.coming {
+  color: var(--text);
+}
+
+.hero {
+  display: grid;
+  gap: 40px;
+  padding: 56px 16px 48px;
+  background-image: var(--dots);
+}
+
+@media (min-width: 1024px) {
+  .hero {
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    align-items: center;
+    padding: 96px 48px 80px;
+  }
+}
+
+.display {
+  margin-top: 18px;
+  font-size: clamp(48px, 8vw, 104px);
+  font-weight: 600;
+  line-height: 0.95;
+  letter-spacing: -0.055em;
+}
+
+.lede {
+  margin-top: 22px;
+  max-width: 56ch;
+  color: var(--text-2);
+  font-size: 17px;
+  line-height: 1.6;
+}
+
+.actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-top: 28px;
+}
+
+/* The plan: Question → four labelled branches → Result. List view below 720px. */
+.plan {
+  display: grid;
+  gap: 14px;
+}
+
+@media (min-width: 720px) {
+  .plan {
+    grid-template-columns: 140px minmax(0, 1fr);
+    grid-template-rows: auto auto;
+    column-gap: 28px;
+  }
+}
+
+.question,
+.result,
+.branch,
+.step {
+  position: relative;
+  padding: 12px 14px;
+  border: 1px solid var(--border-strong);
+  border-radius: 10px;
+  background: var(--surface);
+}
+
+.question {
+  align-self: center;
+}
+
+.question b,
+.step b {
+  display: block;
+  margin-top: 4px;
+  font-size: 15px;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+}
+
+.branches > ol {
+  display: grid;
+  gap: 10px;
+}
+
+@media (min-width: 720px) {
+  .branches {
+    position: relative;
+    grid-row: span 2;
+    padding-left: 22px;
+    border-left: 1px solid var(--border-strong);
+  }
+
+  .branches::before {
+    content: "";
+    position: absolute;
+    top: 50%;
+    left: -29px;
+    width: 28px;
+    height: 1px;
+    background: var(--border-strong);
+  }
+
+  .branch::after {
+    content: "";
+    position: absolute;
+    top: 50%;
+    left: -23px;
+    width: 22px;
+    height: 1px;
+    background: var(--branch);
+  }
+
+  .branches > ol {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .result {
+    grid-column: 1;
+    grid-row: 2;
+    align-self: end;
+  }
+}
+
+@media (max-width: 719px) {
+  .branches {
+    padding-left: 16px;
+    border-left: 1px solid var(--border-strong);
+    margin-left: 12px;
+  }
+}
+
+.branch {
+  padding-left: 18px;
+}
+
+.branch::before {
+  content: "";
+  position: absolute;
+  top: 10px;
+  bottom: 10px;
+  left: 0;
+  width: 3px;
+  border-radius: 2px;
+  background: var(--branch);
+}
+
+.branch[data-branch="A"] {
+  --branch: var(--branch-A);
+}
+
+.branch[data-branch="B"] {
+  --branch: var(--branch-B);
+}
+
+.branch[data-branch="C"] {
+  --branch: var(--branch-C);
+}
+
+.branch[data-branch="D"] {
+  --branch: var(--branch-D);
+}
+
+.branch .kicker {
+  color: var(--branch);
+}
+
+.branch ul {
+  margin-top: 6px;
+  font-size: 14px;
+  line-height: 1.7;
+}
+
+.resultLink {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  margin-top: 4px;
+  color: var(--accent);
+  font-size: 15px;
+  font-weight: 600;
+}
+
+.stage {
+  padding: 32px 12px;
+  border-top: 1px solid var(--border);
+}
+
+@media (min-width: 640px) {
+  .stage {
+    padding: 48px 32px;
+  }
+}
+
+.block {
+  padding: 64px 16px 88px;
+  border-top: 1px solid var(--border);
+}
+
+@media (min-width: 1024px) {
+  .block {
+    padding-inline: 48px;
+  }
+}
+
+.blockHead {
+  max-width: 720px;
+}
+
+.h2 {
+  margin-top: 14px;
+  font-size: clamp(32px, 4.4vw, 56px);
+  font-weight: 600;
+  line-height: 1.02;
+  letter-spacing: -0.045em;
+}
+
+.lane {
+  display: grid;
+  gap: 12px;
+  margin-top: 40px;
+  counter-reset: step;
+}
+
+@media (min-width: 900px) {
+  .lane {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 28px;
+  }
+
+  .step:not(:last-child)::after {
+    content: "";
+    position: absolute;
+    top: 50%;
+    right: -29px;
+    width: 28px;
+    height: 1px;
+    background: var(--border-strong);
+  }
+}
+
+.step > span:last-child {
+  display: block;
+  margin-top: 4px;
+  color: var(--text-2);
+  font-size: 13.5px;
+}
