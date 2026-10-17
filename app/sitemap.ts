@@ -1,6 +1,7 @@
 import type { MetadataRoute } from "next";
 
 import { getChangelog } from "@/lib/data";
+import { getGuideItems } from "@/lib/guide";
 import { absoluteUrl } from "@/lib/site";
 
 export const dynamic = "force-static";
@@ -12,6 +13,10 @@ export default function sitemap(): MetadataRoute.Sitemap {
     ["/", 1],
     ["/download/", 0.8],
     ["/docs/", 0.7],
+    ...getGuideItems()
+      .filter((item) => item.slug)
+      .map((item): [string, number] => [item.href, 0.6]),
+    ["/docs/technical/", 0.5],
     ["/changelog/", 0.6],
     ["/privacy/", 0.3],
   ];

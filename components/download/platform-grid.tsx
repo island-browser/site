@@ -130,7 +130,7 @@ export function PlatformGrid({ cards, hasRelease }: { cards: PlatformCard[]; has
                   </p>
                   <p className="mt-1 text-[12.5px] text-fg-2">
                     {hasRelease ? "Not in this release" : "Not published yet"} ·{" "}
-                    <Link href="/docs/#quick-start" className="link">
+                    <Link href="/docs/technical/#quick-start" className="link">
                       build from source
                     </Link>
                   </p>

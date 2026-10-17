@@ -46,7 +46,7 @@ const GROUPS: Group[] = [
   {
     id: "browse",
     title: "Browse",
-    href: "/docs/#tabs",
+    href: "/docs/technical/#tabs",
     rows: [
       { Icon: Pin, title: "Spaces and pinned tabs", text: "Named spaces, each with its own tabs; pinned tabs stay first.", keys: "toggle_pin" },
       { Icon: PanelLeft, title: "Icon rail", text: "The sidebar collapses to one icon per tab and comes back as you left it.", keys: "toggle_sidebar" },
@@ -60,7 +60,7 @@ const GROUPS: Group[] = [
   {
     id: "read",
     title: "Read",
-    href: "/docs/#reader",
+    href: "/docs/technical/#reader",
     rows: [
       { Icon: Search, title: "Start page", text: "One field to search, ask the agent or start research. Speed dial in 0.7.", value: "New tab" },
       { Icon: TextSearch, title: "Address bar search", text: "Type words, not an address, and get results from Google, DuckDuckGo or Yandex." },
@@ -73,7 +73,7 @@ const GROUPS: Group[] = [
   {
     id: "agent",
     title: "Agent",
-    href: "/docs/#agents",
+    href: "/docs/technical/#agents",
     rows: [
       { Icon: Sparkles, title: "Agent in the sidebar", text: "Claude Code, Codex, OpenCode, Gemini CLI, Qwen Code, Goose or any ACP agent.", keys: "toggle_agent" },
       { Icon: Wrench, title: "Browser tools over MCP", text: "Island's tools for any agent, on 127.0.0.1 behind a per-launch token.", value: `${toolCount} tools` },
@@ -85,7 +85,7 @@ const GROUPS: Group[] = [
   {
     id: "yours",
     title: "Yours",
-    href: "/docs/#looks",
+    href: "/docs/technical/#looks",
     rows: [
       { Icon: Palette, title: "Looks", text: "Native, Arc or Graphite in Settings → Appearance, or tune your own.", seven: true },
       { Icon: Keyboard, title: "Shortcuts", text: "Every action can be rebound in Settings; ⌘/ shows a cheatsheet in 0.7.", keys: "settings" },

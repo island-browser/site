@@ -110,7 +110,7 @@ export default function DownloadPage() {
                 </p>
               </div>
             </div>
-            <Link href="/docs/#quick-start" className="btn btn-primary flex-none">
+            <Link href="/docs/technical/#quick-start" className="btn btn-primary flex-none">
               Quick start <ArrowRight className="size-4" aria-hidden />
             </Link>
           </div>
