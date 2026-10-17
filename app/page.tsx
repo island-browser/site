@@ -3,11 +3,13 @@ import type { Metadata } from "next";
 import { Features } from "@/components/home/features";
 import {
   Agents,
-  FirstRunAndAvailability,
+  Availability,
+  ComingNext,
   Hero,
-  Intro,
-  Keyboard,
+  KeyboardSection,
+  Looks,
   OpenSource,
+  Research,
 } from "@/components/home/sections";
 import { Band } from "@/components/section";
 import { getVersion } from "@/lib/data";
@@ -27,7 +29,7 @@ export default function HomePage() {
     "@type": "SoftwareApplication",
     name: "Island",
     applicationCategory: "BrowserApplication",
-    operatingSystem: "macOS",
+    operatingSystem: "macOS, Windows, Linux",
     url: absoluteUrl("/"),
     downloadUrl: absoluteUrl("/download/"),
     releaseNotes: absoluteUrl("/changelog/"),
@@ -47,13 +49,15 @@ export default function HomePage() {
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd).replace(/</g, "\\u003c") }}
       />
       <Hero version={version} />
-      <Intro />
-      <Band id="features" labelledBy="features-title" className="!border-t">
-        <Features />
+      <Band id="features" labelledBy="features-title">
+        <Features version={version} />
       </Band>
+      <Research version={version} />
       <Agents />
-      <Keyboard />
-      <FirstRunAndAvailability />
+      <Looks version={version} />
+      <KeyboardSection version={version} />
+      <Availability version={version} />
+      <ComingNext />
       <OpenSource />
     </div>
   );

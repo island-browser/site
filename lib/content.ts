@@ -67,31 +67,104 @@ export const toolCount = toolGroups.reduce((n, g) => n + g.tools.length, 0);
 
 /** A key combination: each entry is one key cap. "Cmd", "Shift", "Opt" render as symbols. */
 export type Combo = string[];
-export type Shortcut = { combos: Combo[]; action: string; note?: string; separator?: string };
 
+export type ShortcutGroup =
+  | "Navigate"
+  | "Tabs"
+  | "Spaces and layout"
+  | "Page"
+  | "Palettes, agent and app";
+
+/**
+ * One default binding, in keymap.cc's notation ("Mod" is Cmd on macOS and Ctrl elsewhere,
+ * "Control" is the Control key everywhere). `other` is set where Windows and Linux differ beyond
+ * Mod; `since` marks a binding that is not in the current release yet.
+ */
+export type Shortcut = {
+  id: string;
+  group: ShortcutGroup;
+  action: string;
+  mac: string;
+  other?: string;
+  note?: string;
+  since?: string;
+};
+
+// Generated from the kActions table in the browser's src/main/keymap.cc (macOS defaults), in
+// keymap order within each group. Every one is rebindable in Settings > Shortcuts.
 export const shortcuts: Shortcut[] = [
-  { combos: [["Cmd", "K"]], action: "Command palette" },
-  { combos: [["Cmd", "Shift", "K"]], action: "Search palette" },
-  { combos: [["Cmd", "J"]], action: "Show or hide the agent" },
-  { combos: [["Cmd", "Shift", "A"]], action: "All tabs" },
-  { combos: [["Cmd", ","]], action: "Settings" },
-  { combos: [["Cmd", "B"]], action: "Show or hide the sidebar" },
-  { combos: [["Cmd", "L"]], action: "Focus the address field" },
-  { combos: [["Cmd", "T"], ["Cmd", "W"]], action: "New tab / close tab" },
-  { combos: [["Cmd", "Shift", "["], ["Cmd", "Shift", "]"]], action: "Previous tab / next tab" },
-  { combos: [["Cmd", "1"], ["9"]], action: "Select the numbered tab", separator: "…" },
-  { combos: [["Cmd", "D"]], action: "Pin or unpin the tab" },
-  { combos: [["Cmd", "Opt", "N"]], action: "New space" },
-  { combos: [["F2"]], action: "Rename the space" },
-  { combos: [["Cmd", "Shift", "S"]], action: "Split view with the next tab" },
-  { combos: [["Cmd", "Opt", "["], ["Cmd", "Opt", "]"]], action: "Move the split divider" },
-  {
-    combos: [["Cmd", "["], ["Cmd", "]"]],
-    action: "Back / forward",
-    note: "macOS; Alt+← / → elsewhere",
-  },
-  { combos: [["Cmd", "R"]], action: "Reload" },
+  { id: "back", group: "Navigate", action: "Back", mac: "Mod+[", other: "Alt+Left" },
+  { id: "forward", group: "Navigate", action: "Forward", mac: "Mod+]", other: "Alt+Right" },
+  { id: "reload", group: "Navigate", action: "Reload", mac: "Mod+R" },
+  { id: "reload_ignore_cache", group: "Navigate", action: "Reload ignoring cache", mac: "Mod+Shift+R" },
+  { id: "stop_loading", group: "Navigate", action: "Stop loading", mac: "Mod+." },
+  { id: "focus_address", group: "Navigate", action: "Focus address", mac: "Mod+L" },
+  { id: "copy_url", group: "Navigate", action: "Copy tab URL", mac: "Mod+Shift+C", note: "macOS only for now" },
+  { id: "new_tab", group: "Tabs", action: "New tab", mac: "Mod+T" },
+  { id: "close_tab", group: "Tabs", action: "Close tab", mac: "Mod+W" },
+  { id: "reopen_tab", group: "Tabs", action: "Reopen closed tab", mac: "Mod+Shift+T" },
+  { id: "next_tab", group: "Tabs", action: "Next tab", mac: "Mod+Shift+]" },
+  { id: "previous_tab", group: "Tabs", action: "Previous tab", mac: "Mod+Shift+[" },
+  { id: "next_tab_alt", group: "Tabs", action: "Next tab (alternate)", mac: "Control+Tab" },
+  { id: "previous_tab_alt", group: "Tabs", action: "Previous tab (alternate)", mac: "Control+Shift+Tab" },
+  { id: "toggle_pin", group: "Tabs", action: "Pin or unpin tab", mac: "Mod+D" },
+  { id: "tab_overview", group: "Tabs", action: "All tabs", mac: "Mod+Shift+A" },
+  { id: "new_space", group: "Spaces and layout", action: "New space", mac: "Mod+Alt+N" },
+  { id: "rename_space", group: "Spaces and layout", action: "Rename space", mac: "F2" },
+  { id: "next_space", group: "Spaces and layout", action: "Next space", mac: "Mod+Alt+Down" },
+  { id: "previous_space", group: "Spaces and layout", action: "Previous space", mac: "Mod+Alt+Up" },
+  { id: "toggle_sidebar", group: "Spaces and layout", action: "Toggle sidebar", mac: "Mod+B" },
+  { id: "toggle_split", group: "Spaces and layout", action: "Split view with the next tab", mac: "Mod+Shift+S" },
+  { id: "divider_left", group: "Spaces and layout", action: "Move split divider left", mac: "Mod+Alt+[" },
+  { id: "divider_right", group: "Spaces and layout", action: "Move split divider right", mac: "Mod+Alt+]" },
+  { id: "zoom_in", group: "Page", action: "Zoom in", mac: "Mod+=" },
+  { id: "zoom_in_alt", group: "Page", action: "Zoom in (alternate)", mac: "Mod+Shift+=" },
+  { id: "zoom_out", group: "Page", action: "Zoom out", mac: "Mod+-" },
+  { id: "zoom_reset", group: "Page", action: "Reset zoom", mac: "Mod+0" },
+  { id: "find_in_page", group: "Page", action: "Find in page", mac: "Mod+F" },
+  { id: "find_next", group: "Page", action: "Find next match", mac: "Mod+G" },
+  { id: "find_previous", group: "Page", action: "Find previous match", mac: "Mod+Shift+G" },
+  { id: "reader_mode", group: "Page", action: "Reader mode", mac: "Mod+Alt+R" },
+  { id: "command_palette", group: "Palettes, agent and app", action: "Command palette", mac: "Mod+K" },
+  { id: "search_palette", group: "Palettes, agent and app", action: "Search palette", mac: "Mod+Shift+K" },
+  { id: "toggle_agent", group: "Palettes, agent and app", action: "Show or hide the agent", mac: "Mod+J" },
+  { id: "settings", group: "Palettes, agent and app", action: "Settings", mac: "Mod+," },
+  { id: "cheatsheet", group: "Palettes, agent and app", action: "Show shortcut cheatsheet", mac: "Mod+/", since: "0.7" },
 ];
+
+export const shortcutGroups: ShortcutGroup[] = [
+  "Navigate",
+  "Tabs",
+  "Spaces and layout",
+  "Page",
+  "Palettes, agent and app",
+];
+
+const MAC_KEYS: Record<string, string> = { Mod: "Cmd", Alt: "Opt" };
+
+/** Key caps for a keymap chord as macOS shows it ("Mod+Shift+K" → ⌘ ⇧ K). */
+export const macCombo = (chord: string): Combo =>
+  chord.split(/\+(?!$)/).map((k) => MAC_KEYS[k] ?? k);
+
+/** The default binding for an action id, as macOS key caps. */
+export const comboFor = (id: string): Combo => {
+  const s = shortcuts.find((x) => x.id === id);
+  if (!s) throw new Error(`no shortcut ${id}`);
+  return macCombo(s.mac);
+};
+
+/** "Coming in 0.7" until data/VERSION reaches 0.7.0, "New in 0.7" after. */
+export function sevenLabel(version: string) {
+  const [major, minor] = version.split(".").map(Number);
+  return major > 0 || minor >= 7 ? "New in 0.7" : "Coming in 0.7";
+}
+
+/** Whether 0.7 (the Native look, the Plan tab, the cheatsheet) is in the current release. */
+export const hasSeven = (version: string) => sevenLabel(version) === "New in 0.7";
+
+/** How many default bindings the given release has (0.7 adds the cheatsheet). */
+export const shortcutCount = (version: string) =>
+  shortcuts.filter((s) => !s.since || hasSeven(version)).length;
 
 export const mcpHttpConfig = `{
   "mcpServers": {
