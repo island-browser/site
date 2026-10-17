@@ -53,8 +53,8 @@ const SENDS = [
   },
   {
     what: "Update checks",
-    where: "api.github.com",
-    when: "At most once a day after startup, or when you ask; the archive is downloaded only when an update exists. Off with ISLAND_DISABLE_UPDATES=1, and never from a CMake build directory.",
+    where: "api.github.com, github.com",
+    when: "At most once a day after startup, or when you ask; the archive is downloaded from the GitHub release only when an update exists. Off with ISLAND_DISABLE_UPDATES=1, and never from a CMake build directory.",
   },
   {
     what: "Searches",
@@ -64,7 +64,7 @@ const SENDS = [
   {
     what: "The agent",
     where: "The program you run",
-    when: "Questions, Research and the page text it reads through Island's tools go to the ACP agent you configured. What that agent sends to its own provider is governed by its terms, not Island's.",
+    when: "Questions, Research and the page text it reads through Island's tools go to the ACP agent you configured. The npx presets (Claude Code, Codex) fetch their package from the npm registry when they start. What the agent sends to its own provider is governed by its terms, not Island's.",
   },
 ];
 

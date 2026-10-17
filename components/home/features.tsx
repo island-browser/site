@@ -27,7 +27,7 @@ import type { ReactNode } from "react";
 
 import { Keys } from "@/components/keys";
 import { SectionHeader } from "@/components/section";
-import { comboFor, sevenLabel, toolCount } from "@/lib/content";
+import { comboFor, hasSeven, sevenLabel, toolCount } from "@/lib/content";
 
 type Row = {
   Icon: typeof Pin;
@@ -105,11 +105,18 @@ export function Features({ version }: { version: string }) {
         label="The browser, today"
         title={`Everything in Island ${version}.`}
         lede={
-          <>
-            Each row is in the current release unless it carries the{" "}
-            <span className="tag tag-new align-[1px]">{seven}</span> pill: those are merged and land
-            with the next version.
-          </>
+          hasSeven(version) ? (
+            <>
+              Every row is in the current release; rows marked{" "}
+              <span className="tag tag-new align-[1px]">{seven}</span> arrived with 0.7.
+            </>
+          ) : (
+            <>
+              Each row is in the current release unless it carries the{" "}
+              <span className="tag tag-new align-[1px]">{seven}</span> pill: those are merged and
+              land with the next version.
+            </>
+          )
         }
       />
       <div className="gutter grid grid-cols-1 gap-6 pb-16 sm:pb-20 lg:grid-cols-2">

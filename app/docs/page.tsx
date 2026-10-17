@@ -128,8 +128,15 @@ export default function DocsPage() {
         <h1 className="h1">How Island works.</h1>
         <p className="lede mt-5 max-w-[64ch]">
           Version <span className="font-mono text-[0.9em] text-fg">{version}</span>. Everything below
-          is in this release unless it carries the {sevenTag} pill. Those parts are merged and ship
-          with the next version. If a claim here and the repository disagree, the repository wins.
+          {hasSeven(version) ? (
+            <>is in this release; parts marked {sevenTag} arrived with 0.7.</>
+          ) : (
+            <>
+              is in this release unless it carries the {sevenTag} pill. Those parts are merged and
+              ship with the next version.
+            </>
+          )}{" "}
+          If a claim here and the repository disagree, the repository wins.
         </p>
       </div>
 

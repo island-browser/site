@@ -59,7 +59,7 @@ export function DocsToc({ items }: { items: TocItem[] }) {
       <details className="card group lg:hidden">
         <summary className="flex h-11 cursor-pointer list-none items-center justify-between px-4 text-sm font-medium [&::-webkit-details-marker]:hidden">
           On this page
-          <ChevronDown className="size-4 text-fg-2 transition-transform group-open:rotate-180" aria-hidden />
+          <ChevronDown className="size-4 text-fg-2 group-open:rotate-180" aria-hidden />
         </summary>
         <nav aria-label="On this page (mobile)" className="border-t border-line px-4 py-3">
           {list}

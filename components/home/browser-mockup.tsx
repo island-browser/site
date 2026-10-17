@@ -47,8 +47,8 @@ const FAVORITES = [
 
 const TABS: MockTab[] = [
   { id: "plan", title: "Research plan", Icon: Waypoints, url: "Research plan", blocked: 0, reader: false, agent: "waiting" },
-  { id: "repo", title: "island-browser/island", Icon: GitPullRequest, url: "github.com", blocked: 14, reader: false, agent: "reading" },
-  { id: "cef", title: "Alloy style and browser views", Icon: MessagesSquare, url: "magpcss.org", blocked: 3, reader: true, agent: null },
+  { id: "repo", title: "island-browser/island", Icon: GitPullRequest, url: "github.com", blocked: 14, reader: false, agent: null },
+  { id: "cef", title: "Alloy style and browser views", Icon: MessagesSquare, url: "magpcss.org", blocked: 3, reader: true, agent: "reading" },
   { id: "acp", title: "Agent Client Protocol", Icon: BookOpen, url: "agentclientprotocol.com", blocked: 0, reader: true, agent: null },
 ];
 
@@ -71,7 +71,7 @@ const SPACES = ["Work", "Read", "Home"];
  * agent panel. Sidebar rows are WAI-ARIA tabs that switch the page, the address field and its
  * indicators. Everything else is decorative.
  */
-export function BrowserMockup({ initial = 0 }: { initial?: number }) {
+export function BrowserMockup({ initial = 2 }: { initial?: number }) {
   const [active, setActive] = useState(initial);
   const base = useId();
   const refs = useRef<(HTMLButtonElement | null)[]>([]);
