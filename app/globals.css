@@ -4,24 +4,34 @@
 @custom-variant dark (&:where(.dark, .dark *));
 
 /*
- * Graphite design tokens (Island design contract v3).
- * These values must match the `design-tokens` block in Island's DESIGN.md exactly;
- * `npm run check:tokens` fails CI when they drift.
+ * Native look design tokens (Island's 0.7 default look).
+ * Colors must match the `design-tokens-native` block in Island's DESIGN.md exactly; radii,
+ * spacing and motion are not part of the Native contract and still match the Graphite
+ * `design-tokens` block. `npm run check:tokens` fails CI when either drifts.
  */
 :root {
-  --background: #FAFAFA;
+  --background: #EBEBEF;
   --surface: #FFFFFF;
-  --surface-2: #F2F2F2;
-  --text: #0A0A0A;
-  --text-2: #666666;
-  --border: #E5E5E5;
-  --accent: #0068D6;
-
-  --space-blue: #0090FF;
-  --space-coral: #E5484D;
-  --space-green: #30A46C;
-  --space-amber: #FFB224;
-  --space-purple: #8E4EC6;
+  --surface-2: #F6F6F8;
+  --fill: #E8E8ED;
+  --text: #1D1D1F;
+  --text-2: #636366;
+  --text-3: #8E8E93;
+  --border: #E5E5EA;
+  --border-strong: #D2D2D7;
+  --accent: #0A64D8;
+  --selection: #0A64D8;
+  --accent-soft: #DFE9F8;
+  --accent-text: #0A4FA8;
+  --warning-bg: #FFF8E6;
+  --warning-border: #F5D38A;
+  --warning-text: #6A4A00;
+  --success: #248A3D;
+  --danger: #D70015;
+  --branch-a: #0A64D8;
+  --branch-b: #8E44AD;
+  --branch-c: #C25400;
+  --branch-d: #1F8A70;
 
   --radius-sm: 6px;
   --radius-md: 10px;
@@ -38,24 +48,40 @@
   --ease-out: cubic-bezier(.16, 1, .3, 1);
 
   /* Derived helpers: mixes of the tokens above, never new hues. */
-  --border-strong: color-mix(in srgb, var(--text) 18%, var(--background));
   --hover: color-mix(in srgb, var(--text) 5%, transparent);
-  --header-bg: color-mix(in srgb, var(--background) 80%, transparent);
-  --shadow-window: 0 1px 2px rgb(0 0 0 / 0.04), 0 8px 24px rgb(0 0 0 / 0.06);
+  --header-bg: color-mix(in srgb, var(--surface-2) 86%, transparent);
+  --shadow-card: 0 1px 2px rgb(0 0 0 / 0.04);
+  --shadow-window: 0 1px 2px rgb(0 0 0 / 0.06), 0 12px 32px rgb(0 0 0 / 0.08);
 
   color-scheme: light;
 }
 
 :root.dark {
-  --background: #0A0A0A;
-  --surface: #111111;
-  --surface-2: #1A1A1A;
-  --text: #EDEDED;
-  --text-2: #A1A1A1;
-  --border: #2A2A2A;
-  --accent: #3291FF;
+  --background: #2A2A2D;
+  --surface: #1E1E20;
+  --surface-2: #252527;
+  --fill: #3A3A3D;
+  --text: #F5F5F7;
+  --text-2: #98989D;
+  --text-3: #6E6E73;
+  --border: #38383A;
+  --border-strong: #48484A;
+  --accent: #0A84FF;
+  --selection: #0A6FE0;
+  --accent-soft: #16324F;
+  --accent-text: #64B5FF;
+  --warning-bg: #3A2E12;
+  --warning-border: #6B5420;
+  --warning-text: #FFD60A;
+  --success: #30D158;
+  --danger: #FF453A;
+  --branch-a: #0A84FF;
+  --branch-b: #BF5AF2;
+  --branch-c: #FF9F0A;
+  --branch-d: #40C8A0;
 
-  --shadow-window: 0 1px 2px rgb(0 0 0 / 0.4), 0 8px 24px rgb(0 0 0 / 0.4);
+  --shadow-card: 0 1px 2px rgb(0 0 0 / 0.3);
+  --shadow-window: 0 1px 2px rgb(0 0 0 / 0.4), 0 12px 32px rgb(0 0 0 / 0.4);
 
   color-scheme: dark;
 }
@@ -63,15 +89,31 @@
 /* No-JS fallback: follow the OS when the theme script has not resolved a class. */
 @media (prefers-color-scheme: dark) {
   :root:not(.light):not(.dark) {
-    --background: #0A0A0A;
-    --surface: #111111;
-    --surface-2: #1A1A1A;
-    --text: #EDEDED;
-    --text-2: #A1A1A1;
-    --border: #2A2A2A;
-    --accent: #3291FF;
+    --background: #2A2A2D;
+    --surface: #1E1E20;
+    --surface-2: #252527;
+    --fill: #3A3A3D;
+    --text: #F5F5F7;
+    --text-2: #98989D;
+    --text-3: #6E6E73;
+    --border: #38383A;
+    --border-strong: #48484A;
+    --accent: #0A84FF;
+    --selection: #0A6FE0;
+    --accent-soft: #16324F;
+    --accent-text: #64B5FF;
+    --warning-bg: #3A2E12;
+    --warning-border: #6B5420;
+    --warning-text: #FFD60A;
+    --success: #30D158;
+    --danger: #FF453A;
+    --branch-a: #0A84FF;
+    --branch-b: #BF5AF2;
+    --branch-c: #FF9F0A;
+    --branch-d: #40C8A0;
 
-    --shadow-window: 0 1px 2px rgb(0 0 0 / 0.4), 0 8px 24px rgb(0 0 0 / 0.4);
+    --shadow-card: 0 1px 2px rgb(0 0 0 / 0.3);
+    --shadow-window: 0 1px 2px rgb(0 0 0 / 0.4), 0 12px 32px rgb(0 0 0 / 0.4);
 
     color-scheme: dark;
   }
@@ -87,12 +129,17 @@
   --color-line-strong: var(--border-strong);
   --color-accent: var(--accent);
   --color-hover: var(--hover);
-  --color-space-blue: var(--space-blue);
-  --color-space-coral: var(--space-coral);
-  --color-space-green: var(--space-green);
-  --color-space-amber: var(--space-amber);
-  --color-space-purple: var(--space-purple);
-  --font-sans: var(--font-geist-sans), ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  --color-fill: var(--fill);
+  --color-fg-3: var(--text-3);
+  --color-selection: var(--selection);
+  --color-accent-soft: var(--accent-soft);
+  --color-accent-text: var(--accent-text);
+  --color-success: var(--success);
+  --color-danger: var(--danger);
+  --color-warning-bg: var(--warning-bg);
+  --color-warning-border: var(--warning-border);
+  --color-warning-text: var(--warning-text);
+  --font-sans: -apple-system, BlinkMacSystemFont, "SF Pro Text", "Segoe UI Variable", "Segoe UI", system-ui, sans-serif;
   --font-mono: var(--font-geist-mono), ui-monospace, SFMono-Regular, Menlo, monospace;
 }
 
@@ -115,7 +162,7 @@
     color: var(--text);
     font-family: var(--font-sans);
     font-size: 15px;
-    line-height: 1.6;
+    line-height: 1.55;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
   }
@@ -163,13 +210,12 @@
     transform: translateY(0);
   }
 
-  /* The bordered 1200px frame that every section sits in. */
+  /* The 1200px column every section sits in, on the grey window canvas. */
   .frame {
     position: relative;
     margin-inline: auto;
     width: 100%;
     max-width: 1200px;
-    border-inline: 1px solid var(--border);
   }
 
   .frame-inner {
@@ -211,91 +257,48 @@
     }
   }
 
-  /* Cross markers where section hairlines meet the frame. */
-  .cross {
-    position: absolute;
-    z-index: 2;
-    width: 11px;
-    height: 11px;
-    color: var(--border-strong);
-    pointer-events: none;
-  }
-
-  .cross::before,
-  .cross::after {
-    content: "";
-    position: absolute;
-    background: currentColor;
-  }
-
-  .cross::before {
-    left: 5px;
-    top: 0;
-    width: 1px;
-    height: 11px;
-  }
-
-  .cross::after {
-    top: 5px;
-    left: 0;
-    width: 11px;
-    height: 1px;
-  }
-
-  .cross-tl {
-    top: -6px;
-    left: -6px;
-  }
-
-  .cross-tr {
-    top: -6px;
-    right: -6px;
-  }
-
+  /* Sentence-case section label, like the Native sidebar and Settings group titles. */
   .label {
-    font-family: var(--font-mono);
-    font-size: 12px;
-    font-weight: 500;
+    font-size: 13px;
+    font-weight: 600;
     line-height: 1.4;
-    letter-spacing: 0.06em;
-    text-transform: uppercase;
     color: var(--text-2);
   }
 
   .display {
-    font-size: clamp(40px, 6.4vw, 76px);
-    font-weight: 600;
-    line-height: 1;
-    letter-spacing: -0.048em;
+    font-size: clamp(36px, 5.6vw, 60px);
+    font-weight: 700;
+    line-height: 1.06;
+    letter-spacing: -0.02em;
     text-wrap: balance;
   }
 
   .h1 {
-    font-size: clamp(34px, 4.6vw, 56px);
-    font-weight: 600;
-    line-height: 1.04;
-    letter-spacing: -0.042em;
+    font-size: clamp(32px, 4.2vw, 48px);
+    font-weight: 700;
+    line-height: 1.08;
+    letter-spacing: -0.022em;
     text-wrap: balance;
   }
 
   .h2 {
-    font-size: clamp(28px, 3.4vw, 40px);
-    font-weight: 600;
-    line-height: 1.1;
-    letter-spacing: -0.036em;
+    font-size: clamp(26px, 3vw, 34px);
+    font-weight: 700;
+    line-height: 1.12;
+    letter-spacing: -0.018em;
     text-wrap: balance;
   }
 
   .h3 {
-    font-size: 16px;
+    font-size: 15px;
     font-weight: 600;
     line-height: 1.35;
-    letter-spacing: -0.012em;
+    letter-spacing: -0.005em;
   }
 
   .lede {
-    font-size: clamp(16px, 1.5vw, 18px);
-    line-height: 1.6;
+    font-size: clamp(16px, 1.5vw, 17px);
+    line-height: 1.55;
     color: var(--text-2);
     text-wrap: pretty;
   }
@@ -310,16 +313,16 @@
     text-decoration-line: underline;
   }
 
-  /* Buttons: primary is solid text color, secondary is a bordered surface. */
+  /* Buttons: primary is the system-blue action, secondary a hairline-outlined surface. */
   .btn {
     display: inline-flex;
     align-items: center;
     justify-content: center;
     gap: 8px;
-    height: 40px;
+    height: 36px;
     padding-inline: 16px;
     border: 1px solid transparent;
-    border-radius: var(--radius-sm);
+    border-radius: 8px;
     font-size: 14px;
     font-weight: 500;
     line-height: 1;
@@ -332,14 +335,14 @@
   }
 
   .btn-sm {
-    height: 32px;
+    height: 28px;
     padding-inline: 12px;
     font-size: 13px;
   }
 
   .btn-primary {
-    background: var(--text);
-    color: var(--background);
+    background: var(--selection);
+    color: #FFFFFF;
   }
 
   .btn-primary:hover {
@@ -347,13 +350,13 @@
   }
 
   .btn-secondary {
-    border-color: var(--border);
+    border-color: var(--border-strong);
     background: var(--surface);
     color: var(--text);
+    box-shadow: var(--shadow-card);
   }
 
   .btn-secondary:hover {
-    border-color: var(--border-strong);
     background: var(--surface-2);
   }
 
@@ -363,7 +366,7 @@
     justify-content: center;
     width: 32px;
     height: 32px;
-    border-radius: var(--radius-sm);
+    border-radius: 6px;
     color: var(--text-2);
     transition:
       color var(--motion-fast) var(--ease-out),
@@ -382,13 +385,12 @@
     min-width: 20px;
     height: 20px;
     padding-inline: 5px;
-    border: 1px solid var(--border);
-    border-bottom-width: 2px;
+    border: 1px solid var(--border-strong);
     border-radius: 5px;
     background: var(--surface);
     color: var(--text);
-    font-family: var(--font-mono);
-    font-size: 11px;
+    font-family: var(--font-sans);
+    font-size: 11.5px;
     font-weight: 500;
     line-height: 1;
     white-space: nowrap;
@@ -422,28 +424,111 @@
     font-size: 11px;
   }
 
+  /* Small rounded status pill. */
   .tag {
     display: inline-flex;
     align-items: center;
     gap: 6px;
-    height: 20px;
-    padding-inline: 6px;
-    border: 1px solid var(--border);
-    border-radius: 4px;
-    background: var(--surface);
+    height: 22px;
+    padding-inline: 8px;
+    border-radius: 999px;
+    background: var(--fill);
     color: var(--text-2);
-    font-family: var(--font-mono);
-    font-size: 10.5px;
+    font-size: 12px;
     font-weight: 500;
-    letter-spacing: 0.06em;
     line-height: 1;
-    text-transform: uppercase;
     white-space: nowrap;
   }
 
+  /* "Coming in 0.7" / "New in 0.7": the soft accent pair the Native look uses for hints. */
   .tag-new {
-    border-color: color-mix(in srgb, var(--accent) 40%, var(--border));
-    color: var(--accent);
+    background: var(--accent-soft);
+    color: var(--accent-text);
+  }
+
+  /* "Coming next": not shipped, so neutral and outlined, never accent. */
+  .tag-next {
+    border: 1px dashed var(--border-strong);
+    background: transparent;
+    color: var(--text-2);
+  }
+
+  /* Settings-style grouped card: white rows on the grey canvas, hairlines between rows. */
+  .card {
+    overflow: hidden;
+    border: 1px solid var(--border);
+    border-radius: var(--radius-md);
+    background: var(--surface);
+    box-shadow: var(--shadow-card);
+  }
+
+  .card-row {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    min-height: 52px;
+    padding: 10px 16px;
+    border-top: 1px solid var(--border);
+  }
+
+  .card-row:first-child {
+    border-top: 0;
+  }
+
+  /* The rounded fill plate behind a row icon, as in Settings. */
+  .row-icon {
+    display: grid;
+    flex: none;
+    place-items: center;
+    width: 28px;
+    height: 28px;
+    border-radius: 7px;
+    background: var(--fill);
+    color: var(--text-2);
+  }
+
+  .row-icon svg {
+    width: 15px;
+    height: 15px;
+  }
+
+  /* Segmented control, as in the Native space switcher and the start page. */
+  .segmented {
+    display: inline-flex;
+    padding: 2px;
+    border-radius: 8px;
+    background: var(--fill);
+  }
+
+  .segmented > li {
+    display: contents;
+  }
+
+  .segmented > :not(li),
+  .segmented > li > * {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    height: 26px;
+    padding-inline: 12px;
+    border-radius: 6px;
+    color: var(--text-2);
+    font-size: 13px;
+    white-space: nowrap;
+    transition: color var(--motion-fast) var(--ease-out);
+  }
+
+  .segmented :is(a, button, span):hover {
+    color: var(--text);
+  }
+
+  .segmented [aria-current="page"],
+  .segmented [aria-checked="true"],
+  .segmented [aria-selected="true"] {
+    background: var(--surface);
+    color: var(--text);
+    font-weight: 500;
+    box-shadow: 0 1px 2px rgb(0 0 0 / 0.12);
   }
 
   .dot {
@@ -459,9 +544,8 @@
   .prose :not(pre) > code,
   .icode {
     padding: 1px 4px;
-    border: 1px solid var(--border);
     border-radius: 5px;
-    background: var(--surface-2);
+    background: var(--fill);
     color: var(--text);
     font-size: 0.8em;
     overflow-wrap: anywhere;
@@ -473,6 +557,7 @@
     border: 1px solid var(--border);
     border-radius: var(--radius-md);
     background: var(--surface);
+    box-shadow: var(--shadow-card);
   }
 
   .codeblock-head {
@@ -480,7 +565,7 @@
     align-items: center;
     justify-content: space-between;
     gap: 12px;
-    height: 40px;
+    height: 36px;
     padding-inline: 14px 4px;
     border-bottom: 1px solid var(--border);
     background: var(--surface-2);
@@ -516,17 +601,17 @@
   }
 
   .prose h2 {
-    font-size: 28px;
-    font-weight: 600;
+    font-size: 26px;
+    font-weight: 700;
     line-height: 1.15;
-    letter-spacing: -0.032em;
+    letter-spacing: -0.018em;
   }
 
   .prose h3 {
     margin-top: 36px;
     font-size: 17px;
     font-weight: 600;
-    letter-spacing: -0.012em;
+    letter-spacing: -0.008em;
   }
 
   .prose h3 + * {
@@ -583,6 +668,7 @@
     border: 1px solid var(--border);
     border-radius: var(--radius-md);
     background: var(--surface);
+    box-shadow: var(--shadow-card);
   }
 
   .data-table {
@@ -597,12 +683,9 @@
     border-bottom: 1px solid var(--border);
     background: var(--surface-2);
     color: var(--text-2);
-    font-family: var(--font-mono);
-    font-size: 11.5px;
-    font-weight: 500;
-    letter-spacing: 0.06em;
+    font-size: 12px;
+    font-weight: 600;
     text-align: left;
-    text-transform: uppercase;
   }
 
   .data-table td {

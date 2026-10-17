@@ -19,15 +19,15 @@
 .announce {
   display: inline-flex;
   align-items: center;
-  gap: 10px;
+  gap: 8px;
   max-width: 100%;
-  height: 32px;
-  padding: 0 10px 0 5px;
+  height: 30px;
+  padding: 0 10px 0 4px;
   border: 1px solid var(--border);
   border-radius: 999px;
   background: var(--surface);
+  box-shadow: var(--shadow-card);
   font-size: 13px;
-  transition: border-color var(--motion-fast) var(--ease-out);
 }
 
 .announce > span:nth-child(2) {
@@ -36,51 +36,8 @@
   text-overflow: ellipsis;
 }
 
-.announce :global(.tag) {
-  border-radius: 999px;
-}
-
 .announce:hover {
-  border-color: var(--border-strong);
-}
-
-.snippet {
-  display: inline-flex;
-  align-items: center;
-  gap: 10px;
-  max-width: 100%;
-  height: 40px;
-  margin-top: 28px;
-  padding: 0 4px 0 14px;
-  border: 1px solid var(--border);
-  border-radius: var(--radius-sm);
-  background: var(--surface);
-  font-family: var(--font-mono);
-  font-size: 13px;
-}
-
-/* The stage behind the product window: a faint field of cross markers (an SVG mask, no gradients). */
-.stage {
   background: var(--surface-2);
-}
-
-:global(.dark) .stage {
-  background: color-mix(in srgb, var(--surface) 70%, var(--background));
-}
-
-.stage::before {
-  content: "";
-  position: absolute;
-  inset: 0;
-  background: var(--border-strong);
-  opacity: 0.55;
-  -webkit-mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='48' height='48'%3E%3Cpath d='M24 20v8M20 24h8' stroke='black' stroke-width='1'/%3E%3C/svg%3E");
-  mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='48' height='48'%3E%3Cpath d='M24 20v8M20 24h8' stroke='black' stroke-width='1'/%3E%3C/svg%3E");
-  -webkit-mask-size: 48px 48px;
-  mask-size: 48px 48px;
-  -webkit-mask-position: center top;
-  mask-position: center top;
-  pointer-events: none;
 }
 
 .mockupIn {
@@ -98,44 +55,120 @@
   }
 }
 
+/* ------------------------------------------------------------- research */
+
+/* The research turn as a plan: four steps joined by hairline connectors. */
+.lane {
+  display: grid;
+  gap: 12px;
+  counter-reset: step;
+}
+
+@media (min-width: 960px) {
+  .lane {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 24px;
+  }
+
+  .step:not(:last-child)::after {
+    content: "";
+    position: absolute;
+    top: 30px;
+    right: -25px;
+    width: 24px;
+    height: 1px;
+    background: var(--border-strong);
+  }
+}
+
+.step {
+  position: relative;
+  padding: 16px;
+}
+
+/* ---------------------------------------------------------------- looks */
+
+/* A schematic of each look's window: sidebar rows and the page, drawn with neutral tokens. */
+.look {
+  display: grid;
+  grid-template-columns: 34% 1fr;
+  height: 132px;
+  overflow: hidden;
+  border-bottom: 1px solid var(--border);
+  background: var(--background);
+  user-select: none;
+}
+
+.lookSide {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  padding: 14px 8px;
+}
+
+.lookSide i {
+  display: block;
+  height: 10px;
+  border-radius: 4px;
+  background: var(--fill);
+}
+
+.lookSide i:nth-child(2) {
+  width: 80%;
+}
+
+.lookPage {
+  margin: 0;
+  border-left: 1px solid var(--border);
+  background: var(--surface);
+}
+
+.lookPage::before {
+  content: "";
+  display: block;
+  height: 18px;
+  border-bottom: 1px solid var(--border);
+  background: var(--surface-2);
+}
+
+/* Native: a selected row in system blue, the full-bleed page. */
+.native .selected {
+  background: var(--selection);
+}
+
+/* Arc: the page floats on a rounded card inset in the window canvas. */
+.arc .lookPage {
+  margin: 8px 8px 8px 0;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  box-shadow: var(--shadow-card);
+}
+
+.arc .lookPage::before {
+  border-radius: 8px 8px 0 0;
+}
+
+.arc .selected {
+  background: var(--surface);
+}
+
+/* Graphite: the near-white sidebar with a hairline-outlined selected row. */
+.graphite .lookSide {
+  background: var(--surface-2);
+}
+
+.graphite .selected {
+  border: 1px solid var(--border-strong);
+  background: var(--surface);
+}
+
 /* ------------------------------------------------------------- first run */
 
 .welcome {
   width: 100%;
   max-width: 420px;
   padding: 20px;
-  border: 1px solid var(--border);
-  border-radius: var(--radius-md);
-  background: var(--surface);
-  box-shadow: var(--shadow-window);
   user-select: none;
-}
-
-.segmented {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 2px;
-  margin-top: 16px;
-  padding: 2px;
-  border: 1px solid var(--border);
-  border-radius: var(--radius-sm);
-  background: var(--surface-2);
-  font-size: 12px;
-  text-align: center;
-}
-
-.segmented span {
-  height: 26px;
-  border-radius: 4px;
-  color: var(--text-2);
-  line-height: 26px;
-}
-
-.segmented .segActive {
-  background: var(--surface);
-  color: var(--text);
-  font-weight: 500;
-  box-shadow: 0 0 0 1px var(--border);
 }
 
 .importRows {
@@ -166,16 +199,7 @@
 }
 
 .boxOn {
-  border-color: var(--text);
-  background: var(--text);
-  color: var(--background);
-}
-
-/* ---------------------------------------------------------- availability */
-
-.platform {
-  padding: 20px;
-  border: 1px solid var(--border);
-  border-radius: var(--radius-md);
-  background: var(--surface);
+  border-color: var(--selection);
+  background: var(--selection);
+  color: #FFFFFF;
 }

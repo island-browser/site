@@ -38,8 +38,8 @@ export function AgentTabs({ tabs }: { tabs: AgentTab[] }) {
 
   return (
     <div className="codeblock">
-      <div className="codeblock-head !pl-1.5">
-        <div role="tablist" aria-label="Connection type" className="flex min-w-0 items-center gap-0.5 overflow-x-auto" onKeyDown={onKeyDown}>
+      <div className="codeblock-head !h-10 !pl-1.5">
+        <div role="tablist" aria-label="Connection type" className="segmented min-w-0 overflow-x-auto" onKeyDown={onKeyDown}>
           {tabs.map((t, i) => {
             const selected = i === active;
             return (
@@ -55,9 +55,7 @@ export function AgentTabs({ tabs }: { tabs: AgentTab[] }) {
                 aria-controls={`${base}-panel`}
                 tabIndex={selected ? 0 : -1}
                 onClick={() => setActive(i)}
-                className={`h-7 flex-none rounded-[5px] px-2.5 font-mono text-xs transition-colors ${
-                  selected ? "bg-surface text-fg shadow-[0_0_0_1px_var(--border)]" : "text-fg-2 hover:text-fg"
-                }`}
+                className="flex-none !h-6 !text-[12.5px]"
               >
                 <span className="sm:hidden">{t.short}</span>
                 <span className="hidden sm:inline">{t.label}</span>
@@ -68,8 +66,8 @@ export function AgentTabs({ tabs }: { tabs: AgentTab[] }) {
         <CopyButton text={copyTextFor(tab.code, tab.lang)} label={`Copy ${tab.label} config`} />
       </div>
       <div role="tabpanel" id={`${base}-panel`} aria-labelledby={`${base}-tab-${tab.id}`}>
-        <div className="flex items-center justify-between gap-3 border-b border-dashed border-line px-4 py-2">
-          <span className="font-mono text-[11.5px] text-fg-2">{tab.filename}</span>
+        <div className="flex items-center justify-between gap-3 border-b border-line px-4 py-2">
+          <span className="text-[12px] text-fg-2">{tab.filename}</span>
         </div>
         <CodeBody code={tab.code} lang={tab.lang} />
         <p className="border-t border-line px-4 py-3 text-[13px] leading-relaxed text-fg-2">{tab.note}</p>

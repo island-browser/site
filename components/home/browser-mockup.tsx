@@ -7,132 +7,72 @@ import {
   BookOpen,
   CalendarDays,
   Check,
-  ChevronDown,
   ChevronLeft,
   ChevronRight,
   FileText,
   GitPullRequest,
-  Globe,
   LayoutGrid,
   Mail,
   MessagesSquare,
-  Network,
   Plus,
   RotateCw,
   Search,
   Settings,
+  Share,
+  Shield,
   Sparkles,
-  SquarePen,
-  X,
+  Waypoints,
 } from "lucide-react";
 
 import s from "./browser-mockup.module.css";
 
-const PINS = [
-  { name: "Mail", Icon: Mail },
-  { name: "Calendar", Icon: CalendarDays },
-  { name: "Chat", Icon: MessagesSquare },
-  { name: "Notes", Icon: FileText },
-];
-
-type PageId = "pulls" | "acp" | "mcp" | "http" | "newtab";
+type PageId = "plan" | "repo" | "cef" | "acp" | "newtab";
+type AgentDot = "reading" | "waiting" | null;
 
 type MockTab = {
   id: PageId;
   title: string;
-  Icon: typeof GitPullRequest;
+  Icon: typeof Mail;
   url: string;
-  /** What the agent panel's context chip calls the page. */
-  chip: string;
+  /** Blocked requests for the address-field shield (hidden at 0). */
+  blocked: number;
+  reader: boolean;
+  agent: AgentDot;
 };
 
+const FAVORITES = [
+  { name: "Mail", Icon: Mail },
+  { name: "Calendar", Icon: CalendarDays },
+];
+
 const TABS: MockTab[] = [
-  {
-    id: "pulls",
-    title: "Island — pull requests",
-    Icon: GitPullRequest,
-    url: "github.com/island-browser/island/pulls",
-    chip: "pull requests",
-  },
-  {
-    id: "acp",
-    title: "Agent Client Protocol",
-    Icon: BookOpen,
-    url: "agentclientprotocol.com",
-    chip: "agentclientprotocol.com",
-  },
-  {
-    id: "mcp",
-    title: "MCP specification",
-    Icon: FileText,
-    url: "modelcontextprotocol.io/specification",
-    chip: "specification",
-  },
-  {
-    id: "http",
-    title: "Streamable HTTP transport",
-    Icon: Network,
-    url: "modelcontextprotocol.io/specification/basic/transports",
-    chip: "transports",
-  },
+  { id: "plan", title: "Research plan", Icon: Waypoints, url: "Research plan", blocked: 0, reader: false, agent: "waiting" },
+  { id: "repo", title: "island-browser/island", Icon: GitPullRequest, url: "github.com", blocked: 14, reader: false, agent: null },
+  { id: "cef", title: "Alloy style and browser views", Icon: MessagesSquare, url: "magpcss.org", blocked: 3, reader: true, agent: "reading" },
+  { id: "acp", title: "Agent Client Protocol", Icon: BookOpen, url: "agentclientprotocol.com", blocked: 0, reader: true, agent: null },
 ];
 
 const NEW_TAB: MockTab = {
   id: "newtab",
-  title: "New tab",
+  title: "New Tab",
   Icon: Plus,
   url: "Search or enter address",
-  chip: "new tab",
+  blocked: 0,
+  reader: false,
+  agent: null,
 };
 
-/** Short, factual stand-ins for the three documentation tabs. */
-const DOCS: Record<"acp" | "mcp" | "http", { site: string; title: string; lead: string; sections: { head: string; body: string }[]; code: string }> = {
-  acp: {
-    site: "agentclientprotocol.com / overview",
-    title: "Agent Client Protocol",
-    lead: "A standard way for editors and other clients to talk to coding agents: the client starts the agent as a subprocess and they exchange JSON-RPC messages over stdio.",
-    sections: [
-      { head: "Lifecycle", body: "initialize, then session/new, then one session/prompt per turn. The agent streams session/update notifications while it works." },
-      { head: "Permissions", body: "Tool calls that need approval arrive as session/request_permission; the client answers with the option the user picked." },
-    ],
-    code: '{"jsonrpc":"2.0","id":3,"method":"session/prompt",\n "params":{"sessionId":"s1","prompt":[{"type":"text","text":"…"}]}}',
-  },
-  mcp: {
-    site: "modelcontextprotocol.io / specification",
-    title: "Model Context Protocol",
-    lead: "An open protocol that connects LLM applications to external tools and data. Messages are JSON-RPC 2.0 between a client and a server.",
-    sections: [
-      { head: "Server features", body: "Resources (context and data), prompts (templated messages) and tools (functions the model can call)." },
-      { head: "Lifecycle", body: "The client sends initialize with its capabilities, the server answers with its own, and the client confirms with notifications/initialized." },
-    ],
-    code: '{"jsonrpc":"2.0","id":7,"method":"tools/call",\n "params":{"name":"browser_list_tabs","arguments":{}}}',
-  },
-  http: {
-    site: "modelcontextprotocol.io / transports",
-    title: "Streamable HTTP",
-    lead: "The server exposes one MCP endpoint. The client POSTs each JSON-RPC message to it; the server answers with JSON or opens a Server-Sent Events stream.",
-    sections: [
-      { head: "Sessions", body: "A server may return an Mcp-Session-Id header at initialization; the client sends it back on every later request." },
-      { head: "Security", body: "Local servers should bind to 127.0.0.1 and validate Origin. Island's endpoint also requires a bearer token." },
-    ],
-    code: "POST /mcp HTTP/1.1\nHost: 127.0.0.1:9223\nAccept: application/json, text/event-stream\nAuthorization: Bearer …",
-  },
-};
-
-const PULLS = [
-  { id: "graphite-agent", title: "Restyle the agent panel and All tabs in Graphite", meta: "draft · agent" },
-  { id: "graphite-tokens", title: "Adopt the Graphite design tokens (contract v3)", meta: "draft · design" },
-  { id: "43", title: "Versioning, a site for 0.4 with auto-deploy", meta: "#43 · release" },
-  { id: "42", title: "Arc-style redesign, built-in ACP agent + MCP tools", meta: "#42 · chrome" },
-];
+const SPACES = ["Work", "Read", "Home"];
 
 /**
- * An interactive illustration of the Island window in the Graphite style: a space-tinted sidebar
- * whose tabs switch the page on the floating card (WAI-ARIA tabs, arrow keys), and the agent
- * panel, which follows the active tab. The window chrome and the agent panel are decorative.
+ * The Island window in its 0.7 default look ("Native"): a grey source-list sidebar with the tabs
+ * of one space, New Tab under them, the segmented space switcher and one Agent button at the
+ * bottom; a toolbar whose address field carries the shield, Reader and agent indicators; and the
+ * agent panel. Sidebar rows are WAI-ARIA tabs that switch the page, the address field and its
+ * indicators. Everything else is decorative.
  */
-export function BrowserMockup() {
-  const [active, setActive] = useState(0);
+export function BrowserMockup({ initial = 2 }: { initial?: number }) {
+  const [active, setActive] = useState(initial);
   const base = useId();
   const refs = useRef<(HTMLButtonElement | null)[]>([]);
   const all = [...TABS, NEW_TAB];
@@ -151,7 +91,7 @@ export function BrowserMockup() {
     refs.current[next]?.focus();
   }
 
-  function tabButton(t: MockTab, i: number, extra = "") {
+  function row(t: MockTab, i: number, extra = "") {
     const selected = i === active;
     return (
       <li key={t.id} role="presentation">
@@ -166,75 +106,114 @@ export function BrowserMockup() {
           aria-controls={`${base}-panel`}
           tabIndex={selected ? 0 : -1}
           onClick={() => setActive(i)}
-          className={`${s.tab} ${selected ? s.tabActive : ""} ${extra}`}
+          className={`${s.row} ${selected ? s.rowSelected : ""} ${extra}`}
         >
-          <span className={s.favicon} aria-hidden="true">
+          <span className={t.id === "newtab" ? s.plusGlyph : s.favicon} aria-hidden="true">
             <t.Icon />
           </span>
-          <span className={s.tabTitle}>{t.title}</span>
-          {selected && t.id !== "newtab" && <X className={s.tabClose} aria-hidden="true" />}
+          <span className={s.rowTitle}>{t.title}</span>
+          {t.agent && !selected && (
+            <span className={`${s.rowDot} ${t.agent === "waiting" ? s.dotWaiting : s.dotReading}`} aria-hidden="true" />
+          )}
         </button>
       </li>
     );
   }
 
   return (
-    <div className={s.window} role="group" aria-label="Island browser preview: pick a tab in the sidebar">
+    <div className={s.window} role="group" aria-label="Island browser preview in the Native look: pick a tab in the sidebar">
       <div className={s.inner}>
         <aside className={s.sidebar}>
-          <div className={s.chrome} aria-hidden="true">
-            <span className={s.dots}>
-              <i />
-              <i />
-              <i />
-            </span>
-            <span className={s.navIcons}>
-              <ChevronLeft />
-              <ChevronRight />
-              <RotateCw />
-            </span>
+          <div className={s.lights} aria-hidden="true">
+            <i />
+            <i />
+            <i />
           </div>
 
-          <div className={s.address} aria-hidden="true">
-            {tab.id === "newtab" ? <Search /> : <Globe />}
-            <span className={tab.id === "newtab" ? s.addressEmpty : undefined}>{tab.url}</span>
-          </div>
-
-          <div className={s.pins} aria-hidden="true">
-            {PINS.map(({ name, Icon }, i) => (
-              <span key={name} className={`${s.pin} ${i === 0 ? s.pinActive : ""}`}>
-                <Icon />
-              </span>
-            ))}
-          </div>
-
-          <p className={s.groupLabel} aria-hidden="true">
-            <i style={{ background: "var(--space-blue)" }} />
-            <span>Work</span>
-            <em>4</em>
+          <p className={s.section} aria-hidden="true">
+            Favorites
           </p>
-          <ul className={s.tabs} role="tablist" aria-orientation="vertical" aria-label="Tabs in the Work space" onKeyDown={onKeyDown}>
-            {TABS.map((t, i) => tabButton(t, i))}
-            {tabButton(NEW_TAB, TABS.length, s.tabNew)}
+          <ul className={s.list} aria-hidden="true">
+            {FAVORITES.map(({ name, Icon }) => (
+              <li key={name} className={s.row}>
+                <span className={s.favicon}>
+                  <Icon />
+                </span>
+                <span className={s.rowTitle}>{name}</span>
+              </li>
+            ))}
           </ul>
 
-          <div className={s.footer} aria-hidden="true">
-            <span className={s.spaces}>
-              <i className={s.spaceActive} style={{ background: "var(--space-blue)" }} />
-              <i style={{ background: "var(--space-green)" }} />
-              <i style={{ background: "var(--space-coral)" }} />
-            </span>
-            <span className={s.footerIcons}>
-              <LayoutGrid />
-              <Sparkles className={s.iconActive} />
-              <Settings />
+          <p className={s.section} aria-hidden="true">
+            Work · Tabs
+          </p>
+          <ul className={s.list} role="tablist" aria-orientation="vertical" aria-label="Tabs in the Work space" onKeyDown={onKeyDown}>
+            {TABS.map((t, i) => row(t, i))}
+            {row(NEW_TAB, TABS.length, s.rowNew)}
+          </ul>
+
+          <div className={s.bottom} aria-hidden="true">
+            <div className={s.switcher}>
+              <span className={s.track}>
+                {SPACES.map((name, i) => (
+                  <span key={name} className={i === 0 ? s.segActive : s.seg}>
+                    {name}
+                  </span>
+                ))}
+              </span>
+              <span className={s.iconBtn}>
+                <Plus />
+              </span>
+              <span className={s.iconBtn}>
+                <LayoutGrid />
+              </span>
+              <span className={s.iconBtn}>
+                <Settings />
+              </span>
+            </div>
+            <span className={s.agentButton}>
+              <Sparkles />
+              Agent
             </span>
           </div>
         </aside>
 
-        <div className={s.canvas}>
-          <div className={s.card} role="tabpanel" id={`${base}-panel`} aria-labelledby={`${base}-tab-${tab.id}`}>
-            <div key={tab.id} className={s.page}>
+        <div className={s.main}>
+          <div className={s.toolbar} aria-hidden="true">
+            <span className={s.navBtn}>
+              <ChevronLeft />
+            </span>
+            <span className={s.navBtn}>
+              <ChevronRight />
+            </span>
+            <div className={s.address}>
+              <span className={s.indLeft}>
+                {tab.blocked > 0 && (
+                  <span className={s.shield} title={`${tab.blocked} requests blocked`}>
+                    <Shield />
+                    {tab.blocked}
+                  </span>
+                )}
+              </span>
+              <span className={`${s.addressText} ${tab.id === "newtab" ? s.addressEmpty : ""}`}>{tab.url}</span>
+              <span className={s.indRight}>
+                {tab.reader && (
+                  <span className={s.reader} title="Reader view">
+                    <BookOpen />
+                  </span>
+                )}
+                {tab.agent && <span className={`${s.agentDot} ${tab.agent === "waiting" ? s.dotWaiting : s.dotReading}`} />}
+                <RotateCw className={s.reload} />
+              </span>
+            </div>
+            <span className={s.toolText}>
+              <Share />
+              <span className={s.toolLabel}>Share</span>
+            </span>
+          </div>
+
+          <div className={s.page} role="tabpanel" id={`${base}-panel`} aria-labelledby={`${base}-tab-${tab.id}`}>
+            <div key={tab.id} className={s.pageIn}>
               <Page id={tab.id} />
             </div>
           </div>
@@ -242,41 +221,29 @@ export function BrowserMockup() {
 
         <aside className={s.agent} aria-hidden="true">
           <div className={s.agentHead}>
-            <span className={s.provider}>
-              <Sparkles />
-              Claude Code
-              <ChevronDown className={s.chevron} />
-            </span>
-            <span className={s.headIcon}>
-              <SquarePen />
-            </span>
+            <b>Agent</b>
+            <span className={s.waitPill}>Waiting for approval</span>
           </div>
           <div className={s.thread}>
-            <p className={s.context}>
-              <Globe />
-              <span>Looking at</span>
-              <b>{tab.title}</b>
+            <p className={s.question}>Can one CEF window host several browser views?</p>
+            <p className={s.toolRow}>
+              <Check className={s.tick} />
+              <code>browser_list_tabs</code>
             </p>
-            <p className={`${s.bubbleUser} ${s.step1}`}>Which tabs in Research are about MCP?</p>
-            <p className={`${s.toolChip} ${s.step2}`}>
-              <span className={s.toolStatus}>
-                <span className={s.spinner} />
-                <Check className={s.toolCheck} />
-              </span>
-              browser_list_tabs
+            <p className={s.toolRow}>
+              <Check className={s.tick} />
+              <code>page_read</code> magpcss.org
             </p>
-            <p className={`${s.reply} ${s.step3}`}>
-              Two: <em>MCP specification</em> and <em>Streamable HTTP</em>. Want them in a split?
+            <p className={s.reply}>
+              I proposed a plan with two branches in the <b>Research plan</b> tab. Nothing runs until you approve it.
             </p>
           </div>
           <div className={s.composer}>
-            <span className={s.placeholder}>
-              Ask anything, or tell it what to do<span className={s.caret} />
-            </span>
+            <span className={s.placeholder}>Ask about this tab or anything</span>
             <div className={s.composerRow}>
-              <span className={s.contextChip}>
-                <Globe />
-                <span>{tab.chip}</span>
+              <span className={s.chip}>
+                <tab.Icon />
+                <span>{tab.title}</span>
               </span>
               <span className={s.send}>
                 <ArrowUp />
@@ -290,84 +257,175 @@ export function BrowserMockup() {
 }
 
 function Page({ id }: { id: PageId }) {
-  if (id === "pulls") return <PullsPage />;
-  if (id === "newtab") return <NewTabPage />;
-  return <DocPage doc={DOCS[id]} />;
+  if (id === "plan") return <PlanPage />;
+  if (id === "newtab") return <StartPage />;
+  if (id === "repo") return <RepoPage />;
+  return <ArticlePage id={id} />;
 }
 
-function PullsPage() {
+/* The Plan tab: a question, two branches, a join and a result; nothing runs before approval. */
+const NODES = [
+  { id: "q", x: 4, y: 98, kicker: "Question", title: "Many views at once?", kind: "question" },
+  { id: "a1", x: 152, y: 24, kicker: "Branch A", title: "Read the CEF docs", kind: "a" },
+  { id: "a2", x: 300, y: 24, kicker: "Branch A", title: "Compare styles", kind: "a" },
+  { id: "b1", x: 152, y: 172, kicker: "Branch B", title: "Search the forum", kind: "b" },
+  { id: "b2", x: 300, y: 172, kicker: "Branch B", title: "Related issues", kind: "b" },
+  { id: "j", x: 448, y: 98, kicker: "Join", title: "Joins A + B", kind: "join" },
+  { id: "r", x: 596, y: 98, kicker: "Result", title: "Report tab", kind: "result" },
+] as const;
+const EDGES: [string, string, "a" | "b" | "trunk"][] = [
+  ["q", "a1", "a"],
+  ["a1", "a2", "a"],
+  ["q", "b1", "b"],
+  ["b1", "b2", "b"],
+  ["a2", "j", "a"],
+  ["b2", "j", "b"],
+  ["j", "r", "trunk"],
+];
+const W = 136;
+const H = 64;
+
+function PlanPage() {
+  const at = (id: string) => NODES.find((n) => n.id === id)!;
   return (
-    <>
-      <div className={s.pageHead}>
-        <p className={s.repo}>
-          <span>island-browser</span>
-          <span className={s.slash}>/</span>
-          <b>island</b>
-        </p>
-        <div className={s.pageTabs}>
-          <span>Code</span>
-          <span>Issues</span>
-          <span className={s.pageTabActive}>
-            Pull requests <em>4</em>
-          </span>
-          <span>Actions</span>
-        </div>
+    <div className={s.plan}>
+      <div className={s.planBar}>
+        <Waypoints />
+        <b>Research plan</b>
+        <span className={s.pausedPill}>Paused · nothing runs until you approve</span>
+        <span className={s.planSeg}>
+          <span className={`${s.segActive} ${s.graphSeg}`}>Graph</span>
+          <span className={`${s.seg} ${s.graphSeg}`}>List</span>
+          <span className={`${s.seg} ${s.listSeg}`}>Graph</span>
+          <span className={`${s.segActive} ${s.listSeg}`}>List</span>
+        </span>
       </div>
-      <div className={s.pageBody}>
-        <div className={s.filterRow}>
-          <span className={s.filter}>is:pr is:open</span>
-          <span className={s.newPr}>New pull request</span>
-        </div>
-        <ul className={s.pulls}>
-          {PULLS.map((p) => (
-            <li key={p.id}>
-              <GitPullRequest className={s.prIcon} aria-hidden="true" />
-              <span className={s.prText}>
-                <b>{p.title}</b>
-                <span>{p.meta}</span>
-              </span>
-            </li>
+      <div className={s.canvas}>
+        <svg viewBox="0 0 736 260" className={s.graph} role="img" aria-label="Plan graph: a question, branch A and branch B with two steps each, a join and a result">
+          {EDGES.map(([from, to, kind]) => {
+            const a = at(from);
+            const b = at(to);
+            const x1 = a.x + W;
+            const y1 = a.y + H / 2;
+            const x2 = b.x;
+            const y2 = b.y + H / 2;
+            return (
+              <g key={`${from}-${to}`} className={kind === "a" ? s.edgeA : kind === "b" ? s.edgeB : s.edgeTrunk}>
+                <path d={`M${x1} ${y1} C${x1 + 30} ${y1} ${x2 - 30} ${y2} ${x2} ${y2}`} fill="none" strokeWidth="1.6" />
+                <circle cx={x2} cy={y2} r="2.6" />
+              </g>
+            );
+          })}
+          {NODES.map((n) => (
+            <g key={n.id} className={`${s.node} ${s[`node_${n.kind}`]}`}>
+              <rect x={n.x} y={n.y} width={W} height={H} rx="8" />
+              {(n.kind === "a" || n.kind === "b") && <rect x={n.x} y={n.y + 6} width="3" height={H - 12} rx="1.5" className={s.stripe} />}
+              <text x={n.x + 12} y={n.y + 20} className={s.kicker}>
+                {n.kicker.toUpperCase()}
+              </text>
+              <text x={n.x + 12} y={n.y + 40} className={s.nodeTitle}>
+                {n.title}
+              </text>
+            </g>
           ))}
-        </ul>
+        </svg>
       </div>
-    </>
+      <ol className={s.planList} aria-label="Plan as a list">
+        {NODES.map((n) => (
+          <li key={n.id} data-kind={n.kind} data-depth={n.id === "a2" || n.id === "b2" ? 1 : 0}>
+            <em>{n.kicker}</em>
+            <b>{n.title}</b>
+          </li>
+        ))}
+      </ol>
+      <div className={s.planFoot}>
+        <span className={s.summary}>5 steps · 2 branches · reads pages, never posts or buys</span>
+        <span className={s.btnPrimary}>Run plan</span>
+        <span className={s.btn}>Run A only</span>
+        <span className={s.btn}>Cancel</span>
+      </div>
+    </div>
   );
 }
 
-function DocPage({ doc }: { doc: (typeof DOCS)[keyof typeof DOCS] }) {
+function StartPage() {
+  const tiles = ["GitHub", "CEF Forum", "MDN", "Hacker News", "Wikipedia", "Mail"];
   return (
-    <article className={s.doc}>
-      <p className={s.docSite}>{doc.site}</p>
-      <h3 className={s.docTitle}>{doc.title}</h3>
-      <p className={s.docLead}>{doc.lead}</p>
-      {doc.sections.map((section) => (
-        <section key={section.head} className={s.docSection}>
-          <h4>{section.head}</h4>
-          <p>{section.body}</p>
-        </section>
-      ))}
-      <pre className={s.docCode}>{doc.code}</pre>
-    </article>
-  );
-}
-
-function NewTabPage() {
-  return (
-    <div className={s.newTab}>
-      <p className={s.newTabSearch}>
+    <div className={s.start}>
+      <span className={s.startSeg}>
+        <span className={s.segActive}>Search</span>
+        <span className={s.seg}>Ask Agent</span>
+        <span className={s.seg}>Research</span>
+      </span>
+      <p className={s.startField}>
         <Search aria-hidden="true" />
-        <span>Search or enter address</span>
+        <span>Search with Google</span>
       </p>
-      <ul className={s.newTabPins}>
-        {PINS.map(({ name, Icon }) => (
-          <li key={name}>
-            <span aria-hidden="true">
-              <Icon />
-            </span>
-            {name}
+      <ul className={s.tiles}>
+        {tiles.map((t) => (
+          <li key={t}>
+            <span aria-hidden="true">{t[0]}</span>
+            {t}
           </li>
         ))}
       </ul>
     </div>
+  );
+}
+
+function RepoPage() {
+  const rows = [
+    ["Release 0.7.1: fix the Linux build", "#62 · merged"],
+    ["Native look: source-list sidebar and address indicators", "#58 · merged"],
+    ["Research plan graph in a Plan tab", "#57 · merged"],
+    ["Shortcut cheatsheet on ⌘/", "#56 · merged"],
+  ];
+  return (
+    <div className={s.doc}>
+      <p className={s.docSite}>
+        island-browser / <b>island</b>
+      </p>
+      <p className={s.docH}>Pull requests</p>
+      <ul className={s.prs}>
+        {rows.map(([title, meta]) => (
+          <li key={title}>
+            <GitPullRequest aria-hidden="true" />
+            <span>
+              <b>{title}</b>
+              <em>{meta}</em>
+            </span>
+          </li>
+        ))}
+      </ul>
+    </div>
+  );
+}
+
+function ArticlePage({ id }: { id: "cef" | "acp" }) {
+  const doc =
+    id === "cef"
+      ? {
+          site: "magpcss.org / forum",
+          title: "Alloy style and several browser views",
+          lead: "Alloy runtime style lets one top-level window host several browser views, which an embedder needs for split view and side panels.",
+          body: "Chrome style windows own their own toolbar and cannot share a window with other views.",
+        }
+      : {
+          site: "agentclientprotocol.com / overview",
+          title: "Agent Client Protocol",
+          lead: "A standard way for clients to talk to coding agents: the client starts the agent as a subprocess and they exchange JSON-RPC over stdio.",
+          body: "Agents stream session/update notifications while they work, including plan updates.",
+        };
+  return (
+    <article className={s.doc}>
+      <p className={s.docSite}>
+        <FileText aria-hidden="true" /> {doc.site}
+      </p>
+      <p className={s.docH}>{doc.title}</p>
+      <p className={s.docLead}>{doc.lead}</p>
+      <p className={s.docBody}>{doc.body}</p>
+      <span className={s.docLine} />
+      <span className={`${s.docLine} ${s.short}`} />
+    </article>
   );
 }

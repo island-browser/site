@@ -38,10 +38,8 @@ export function DocsToc({ items }: { items: TocItem[] }) {
             <a
               href={`#${item.id}`}
               aria-current={current ? "location" : undefined}
-              className={`-ml-px block border-l py-1.5 pl-4 transition-colors ${
-                current
-                  ? "border-fg font-medium text-fg"
-                  : "border-transparent text-fg-2 hover:border-line-strong hover:text-fg"
+              className={`block rounded-md px-2.5 py-1.5 transition-colors ${
+                current ? "bg-fill font-semibold text-fg" : "text-fg-2 hover:bg-hover hover:text-fg"
               }`}
             >
               {item.label}
@@ -55,16 +53,16 @@ export function DocsToc({ items }: { items: TocItem[] }) {
   return (
     <>
       <nav aria-label="On this page" className="hidden lg:block">
-        <p className="label mb-4">On this page</p>
-        <div className="border-l border-line">{list}</div>
+        <p className="label mb-2 px-2.5">On this page</p>
+        {list}
       </nav>
-      <details className="group rounded-md border border-line bg-surface lg:hidden">
+      <details className="card group lg:hidden">
         <summary className="flex h-11 cursor-pointer list-none items-center justify-between px-4 text-sm font-medium [&::-webkit-details-marker]:hidden">
           On this page
-          <ChevronDown className="size-4 text-fg-2 transition-transform group-open:rotate-180" aria-hidden />
+          <ChevronDown className="size-4 text-fg-2 group-open:rotate-180" aria-hidden />
         </summary>
         <nav aria-label="On this page (mobile)" className="border-t border-line px-4 py-3">
-          <div className="border-l border-line">{list}</div>
+          {list}
         </nav>
       </details>
     </>

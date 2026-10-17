@@ -76,7 +76,7 @@ export default function DownloadPage() {
   return (
     <div className="frame">
       <div className="gutter py-16 sm:py-20">
-        <p className="label mb-4">Download</p>
+        <p className="label mb-3">Download</p>
         <h1 className="h1">Get Island.</h1>
         {release ? (
           <p className="lede mt-5 max-w-[64ch]">
@@ -89,14 +89,14 @@ export default function DownloadPage() {
           </p>
         ) : (
           <p className="lede mt-5 max-w-[64ch]">
-            Island is a development build. When a release is published on GitHub its archives appear
-            here, one per platform, with a checksum file next to them.
+            No release is published yet. When one is, its installers and archives appear here, one
+            per platform, with a checksum file next to them.
           </p>
         )}
       </div>
 
       {!release && (
-        <Band crosses>
+        <Band>
           <div className="gutter flex flex-col gap-6 py-10 sm:flex-row sm:items-center sm:justify-between">
             <div className="flex items-start gap-4">
               <span className="grid size-10 flex-none place-items-center rounded-md border border-line bg-surface">
@@ -121,7 +121,7 @@ export default function DownloadPage() {
         <div className="gutter flex flex-wrap items-end justify-between gap-4 py-8">
           <h2 id="platforms-title" className="label">
             Platforms
-            {release && <span className="normal-case"> · {release.tag_name}</span>}
+            {release && <> · {release.tag_name}</>}
           </h2>
           {sums ? (
             <a href={sums.browser_download_url} className="inline-flex items-center gap-1.5 font-mono text-xs text-fg-2 hover:text-fg">
@@ -131,17 +131,15 @@ export default function DownloadPage() {
             <span className="font-mono text-xs text-fg-2">No SHA256SUMS.txt in this release</span>
           ) : null}
         </div>
-        <div className="border-t border-line">
-          <PlatformGrid cards={cards} hasRelease={Boolean(release)} />
-        </div>
+        <PlatformGrid cards={cards} hasRelease={Boolean(release)} />
       </Band>
 
       <Band labelledBy="unsigned-title">
         <div className="grid grid-cols-1 lg:grid-cols-2">
           <div className="gutter py-14 lg:border-r lg:border-line">
             <div className="flex items-center gap-2">
-              <ShieldAlert className="size-4 text-space-coral" aria-hidden />
-              <h2 id="unsigned-title" className="label !text-fg">
+              <ShieldAlert className="size-4 text-warning-text" aria-hidden />
+              <h2 id="unsigned-title" className="h3">
                 Unsigned prerelease
               </h2>
             </div>
@@ -184,12 +182,12 @@ export default function DownloadPage() {
               </div>
             </dl>
             <p className="mt-6 text-[13px] text-fg-2">
-              Only macOS on Apple silicon has been built and run on real hardware so far. Other
-              targets are packaged by CI but still need platform verification.
+              Only macOS on Apple silicon has been built and run on real hardware so far. The other
+              five targets are packaged by CI but still need platform verification.
             </p>
           </div>
           <div className="gutter border-t border-line py-14 lg:border-t-0">
-            <h2 className="label !text-fg">Verify the checksum</h2>
+            <h2 className="h3">Verify the checksum</h2>
             <p className="mt-4 text-[15px] leading-relaxed text-fg-2">
               Every release publishes <code className="icode">SHA256SUMS.txt</code>. Download it next
               to the download and check before opening anything.

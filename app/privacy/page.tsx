@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 
+import { getVersion } from "@/lib/data";
 import { links } from "@/lib/site";
 import { pageMetadata } from "@/lib/metadata";
 
@@ -7,10 +8,11 @@ export const metadata: Metadata = pageMetadata({
   title: "Privacy",
   path: "/privacy/",
   socialTitle: "Privacy — Island",
-  description: "Island product site privacy information: no analytics, trackers, or remote fonts.",
+  description:
+    "No analytics, trackers or remote fonts on this site; what the Island browser sends (blocklists, update checks, searches, your agent) and what it keeps on your device.",
 });
 
-const SECTIONS = [
+const SITE = [
   {
     title: "Information collection",
     body: (
@@ -40,56 +42,109 @@ const SECTIONS = [
       </p>
     ),
   },
+];
+
+/** What Island's own code sends, besides the pages you open (from the browser repository). */
+const SENDS = [
   {
-    title: "The browser and your data",
-    body: (
-      <p>
-        Importing from another browser reads that browser&rsquo;s files on your own computer;
-        nothing is uploaded. The agent tools endpoint listens on <code>127.0.0.1</code> only, behind
-        a token that changes on every launch and is stored in a file only your user account can read.
-        The sidebar agent is a program you choose and run locally — what it sends to its own provider
-        is governed by that agent&rsquo;s terms, not by Island.
-      </p>
-    ),
+    what: "Ad and tracker lists",
+    where: "easylist.to",
+    when: "EasyList and EasyPrivacy, refreshed in the background at most every four days.",
   },
   {
-    title: "Product status",
-    body: (
-      <p>
-        The browser is under development. Any future product data practices will be documented
-        separately before a public release.
-      </p>
-    ),
+    what: "Update checks",
+    where: "api.github.com, github.com",
+    when: "At most once a day after startup, or when you ask; the archive is downloaded from the GitHub release only when an update exists. Off with ISLAND_DISABLE_UPDATES=1, and never from a CMake build directory.",
+  },
+  {
+    what: "Searches",
+    where: "Your search engine",
+    when: "Text you search from the address bar or the start page goes to Google, DuckDuckGo or Yandex, as chosen in Settings. The search palette sends it to the provider you pick there.",
+  },
+  {
+    what: "The agent",
+    where: "The program you run",
+    when: "Questions, Research and the page text it reads through Island's tools go to the ACP agent you configured. The npx presets (Claude Code, Codex) fetch their package from the npm registry when they start. What the agent sends to its own provider is governed by its terms, not Island's.",
   },
 ];
 
+const KEEPS = [
+  "Browsing history: the address and title of http and https pages, up to 50,000 visits. Settings can stop recording or clear it.",
+  "Research reports in reports.json, listed in Settings → Reports.",
+  "Your session (spaces and tabs), your settings and shortcuts in prefs.json, and the cached blocklists.",
+  "The agent tools endpoint's port and token in agent-endpoint.json, readable only by your user. The endpoint listens on 127.0.0.1 only, and the token changes on every launch.",
+];
+
 export default function PrivacyPage() {
+  const version = getVersion();
   return (
     <div className="frame">
       <div className="gutter border-b border-line py-16 sm:py-20">
-        <p className="label mb-4">Privacy</p>
-        <h1 className="h1">A quiet product site.</h1>
-        <p className="lede mt-5 max-w-[60ch]">
-          This static site does not run first-party analytics, advertising scripts, trackers, or
-          remote fonts.
+        <p className="label mb-3">Privacy</p>
+        <h1 className="h1">A quiet site, and a quiet browser.</h1>
+        <p className="lede mt-5 max-w-[62ch]">
+          This static site runs no first-party analytics, advertising scripts, trackers, or remote
+          fonts. The browser keeps what it stores on your device, and this page lists every request
+          its own code makes besides the pages you open.
         </p>
       </div>
-      <div>
-        {SECTIONS.map((s, i) => (
-          <section
-            key={s.title}
-            aria-labelledby={`privacy-${i}`}
-            className="grid grid-cols-1 gap-3 border-b border-line last:border-b-0 lg:grid-cols-[260px_minmax(0,1fr)]"
-            data-reveal
-          >
-            <h2 id={`privacy-${i}`} className="gutter pt-10 text-[15px] font-semibold tracking-[-0.01em] lg:border-r lg:border-line lg:!pr-8 lg:pb-10">
-              <span className="mr-3 font-mono text-xs font-normal text-fg-2">{String(i + 1).padStart(2, "0")}</span>
-              {s.title}
-            </h2>
-            <div className="gutter prose max-w-[720px] pb-10 lg:pt-10">{s.body}</div>
-          </section>
-        ))}
-      </div>
+
+      <section aria-labelledby="privacy-site" className="gutter border-b border-line py-14">
+        <h2 id="privacy-site" className="h2">
+          This site
+        </h2>
+        <div className="card mt-6 max-w-[860px]">
+          {SITE.map((s) => (
+            <div key={s.title} className="card-row !block !py-4">
+              <h3 className="h3">{s.title}</h3>
+              <div className="prose mt-1 !text-[14.5px]">{s.body}</div>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      <section id="browser" aria-labelledby="privacy-browser" className="gutter scroll-mt-20 py-14">
+        <h2 id="privacy-browser" className="h2">
+          The browser
+        </h2>
+        <p className="lede mt-3 max-w-[66ch]">
+          As of Island {version}. Island has no analytics, telemetry or crash reporting, and
+          importing from another browser only reads that browser&rsquo;s files on your computer.
+        </p>
+
+        <h3 className="label mt-10 mb-2 px-1">What it sends</h3>
+        <ul className="card max-w-[860px]">
+          {SENDS.map((r) => (
+            <li key={r.what} className="card-row !items-start !py-4 max-sm:flex-col max-sm:!gap-1">
+              <span className="w-[180px] flex-none">
+                <b className="block text-[14px] font-semibold">{r.what}</b>
+                <span className="text-[12.5px] text-fg-2">{r.where}</span>
+              </span>
+              <span className="text-[14px] leading-relaxed text-fg-2">{r.when}</span>
+            </li>
+          ))}
+        </ul>
+        <p className="mt-3 max-w-[860px] px-1 text-[13px] text-fg-2">
+          The start page, Reader, Peek, Report and Plan tabs are local documents: they request
+          nothing on their own. Favicons are fetched for web pages only. Site permission requests
+          (camera, microphone, location, notifications) are declined.
+        </p>
+
+        <h3 className="label mt-10 mb-2 px-1">What it keeps, on this device</h3>
+        <ul className="card max-w-[860px]">
+          {KEEPS.map((k) => (
+            <li key={k} className="card-row text-[14px] leading-relaxed text-fg-2">
+              {k}
+            </li>
+          ))}
+        </ul>
+
+        <h3 className="label mt-10 mb-2 px-1">Product status</h3>
+        <p className="max-w-[66ch] px-1 text-[14.5px] leading-relaxed text-fg-2">
+          Island is an unsigned prerelease. This page describes the repository as it stands; if a
+          later version sends anything else, this list changes with it.
+        </p>
+      </section>
     </div>
   );
 }

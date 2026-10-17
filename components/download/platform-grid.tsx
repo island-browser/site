@@ -75,20 +75,20 @@ export function PlatformGrid({ cards, hasRelease }: { cards: PlatformCard[]; has
     detected !== null && c.os === detected.os && (detected.arch === null || c.arch === detected.arch);
 
   return (
-    <ul className="grid grid-cols-1 gap-px bg-line sm:grid-cols-2 lg:grid-cols-3">
+    <ul className="gutter grid grid-cols-1 gap-4 pb-10 sm:grid-cols-2 lg:grid-cols-3">
       {cards.map((c) => {
         const mine = isMine(c);
         return (
           <li
             key={c.target}
-            className={`cell-pad relative flex flex-col gap-6 bg-bg ${mine ? "z-[1] outline outline-1 -outline-offset-1 outline-accent" : ""}`}
+            className={`card relative flex flex-col gap-6 p-5 ${mine ? "outline outline-2 -outline-offset-1 outline-accent" : ""}`}
           >
             <div className="flex items-start justify-between gap-3">
               <div>
                 <h3 className="h3">
                   {c.name} <span className="font-normal text-fg-2">· {c.detail}</span>
                 </h3>
-                <p className="mt-1 font-mono text-[11.5px] text-fg-2">{c.target}</p>
+                <p className="mt-1 font-mono text-[12px] text-fg-2">{c.target}</p>
               </div>
               <div className="flex flex-col items-end gap-1.5">
                 {mine && (
@@ -97,7 +97,7 @@ export function PlatformGrid({ cards, hasRelease }: { cards: PlatformCard[]; has
                   </span>
                 )}
                 <span className="tag">
-                  <span className={`dot ${c.verified ? "text-space-green" : "text-fg-2"}`} aria-hidden="true" />
+                  <span className={`dot ${c.verified ? "text-success" : "text-fg-3"}`} aria-hidden="true" />
                   {c.verified ? "Verified" : "Unverified"}
                 </span>
               </div>

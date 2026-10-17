@@ -1,16 +1,18 @@
 #!/usr/bin/env node
-// Asserts that the CSS custom properties in app/globals.css match the Graphite design-token
-// contract published in Island's DESIGN.md (the fenced `design-tokens` JSON block).
+// Asserts that the CSS custom properties in app/globals.css match the design-token contracts
+// published in Island's DESIGN.md: every color of the Native look (the fenced
+// `design-tokens-native` JSON block) in light, dark and the no-JS dark fallback, and the radii,
+// spacing and motion of the Graphite contract (`design-tokens`), which Native does not redefine.
 //
 // DESIGN.md is read from a sibling checkout (../island/DESIGN.md, or ISLAND_LOCAL_CHECKOUT)
-// when present, otherwise fetched from the browser repo's main branch. The browser repo is
+// when present, otherwise fetched from the browser repo's `designBranch` (site.config.ts). The browser repo is
 // private for now, so the fetch needs ISLAND_READ_TOKEN (or GITHUB_TOKEN) with read access.
 
 import { existsSync, readFileSync } from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 
-import { rawUrl } from "../site.config.ts";
+import { designRawUrl, siteConfig } from "../site.config.ts";
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const localDesign = path.resolve(
@@ -24,7 +26,13 @@ async function loadDesign() {
   if (existsSync(localDesign)) {
     return { text: readFileSync(localDesign, "utf8"), source: localDesign };
   }
-  const url = rawUrl("DESIGN.md");
+  const url = designRawUrl("DESIGN.md");
+  if (siteConfig.designBranch !== siteConfig.branch) {
+    console.warn(
+      `check:tokens: reading DESIGN.md from ${siteConfig.designBranch}, not ${siteConfig.branch} ` +
+        "(see designBranch in site.config.ts)",
+    );
+  }
   const token = process.env.ISLAND_READ_TOKEN || process.env.GITHUB_TOKEN || "";
   const headers = { "User-Agent": "island-site-check-tokens" };
   if (token) headers.Authorization = `Bearer ${token}`;
@@ -38,9 +46,9 @@ async function loadDesign() {
   return { text: await res.text(), source: url };
 }
 
-function extractTokens(markdown) {
-  const match = markdown.match(/```design-tokens\s*\n([\s\S]*?)\n```/);
-  if (!match) throw new Error("DESIGN.md has no ```design-tokens fenced block");
+function extractTokens(markdown, block) {
+  const match = markdown.match(new RegExp("```" + block + "\\s*\\n([\\s\\S]*?)\\n```"));
+  if (!match) throw new Error(`DESIGN.md has no \`\`\`${block} fenced block`);
   return JSON.parse(match[1]);
 }
 
@@ -78,19 +86,18 @@ function mediaBlock(css, query) {
 
 const norm = (v) => String(v).replace(/\s+/g, " ").replace(/\s*,\s*/g, ", ").trim().toUpperCase();
 
-const COLOR_MAP = {
-  background: "--background",
-  surface: "--surface",
+// Native color keys whose CSS name is not simply the key with dashes.
+const RENAMED = {
   surface_secondary: "--surface-2",
-  text: "--text",
   text_secondary: "--text-2",
-  border: "--border",
-  accent: "--accent",
+  text_tertiary: "--text-3",
 };
+const cssName = (key) => RENAMED[key] ?? `--${key.replace(/_/g, "-")}`;
 
 async function main() {
   const { text, source } = await loadDesign();
-  const tokens = extractTokens(text);
+  const native = extractTokens(text, "design-tokens-native");
+  const tokens = extractTokens(text, "design-tokens");
   const css = readFileSync(cssPath, "utf8");
 
   const light = declarationsFor(css, ":root");
@@ -110,13 +117,11 @@ async function main() {
   };
 
   if (!light) throw new Error("app/globals.css has no `:root { ... }` block");
-  for (const [key, variable] of Object.entries(COLOR_MAP)) {
-    expect(light, ":root", variable, tokens.colors.light[key]);
-    expect(dark, ":root.dark", variable, tokens.colors.dark[key]);
-    expect(darkMedia, "@media dark :root", variable, tokens.colors.dark[key]);
-  }
-  for (const [key, value] of Object.entries(tokens.colors.site_only ?? {})) {
-    expect(light, ":root", `--${key.replace(/_/g, "-")}`, value);
+  const keys = new Set([...Object.keys(native.colors.light), ...Object.keys(native.colors.dark)]);
+  for (const key of keys) {
+    expect(light, ":root", cssName(key), native.colors.light[key] ?? "(not in DESIGN.md)");
+    expect(dark, ":root.dark", cssName(key), native.colors.dark[key] ?? "(not in DESIGN.md)");
+    expect(darkMedia, "@media dark :root", cssName(key), native.colors.dark[key] ?? "(not in DESIGN.md)");
   }
   expect(light, ":root", "--radius-sm", `${tokens.radii.radius_small}px`);
   expect(light, ":root", "--radius-md", `${tokens.radii.radius_medium}px`);
@@ -132,7 +137,8 @@ async function main() {
 
   const failed = rows.filter((r) => !r.ok);
   console.log(
-    `check:tokens — ${tokens.contract} v${tokens.version} (${tokens.accepted_design}) from ${source}`,
+    `check:tokens — ${native.contract} v${native.version} colors, ${tokens.contract} v${tokens.version} ` +
+      `radii/spacing/motion, from ${source}`,
   );
   if (failed.length) {
     const w = Math.max(...failed.map((r) => r.where.length));

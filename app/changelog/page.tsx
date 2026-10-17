@@ -13,13 +13,14 @@ export const metadata: Metadata = pageMetadata({
     "What changed in each Island release, generated from the browser repository's CHANGELOG.md on every deploy.",
 });
 
+// Status colors from the Native tokens; "changed" stays neutral (accent is for actions only).
 const GROUP_COLOR: Record<string, string> = {
-  added: "var(--space-green)",
-  changed: "var(--space-blue)",
-  fixed: "var(--space-coral)",
-  removed: "var(--space-coral)",
-  security: "var(--space-amber)",
-  deprecated: "var(--space-amber)",
+  added: "var(--success)",
+  changed: "var(--text-2)",
+  fixed: "var(--danger)",
+  removed: "var(--danger)",
+  security: "var(--warning-text)",
+  deprecated: "var(--warning-text)",
 };
 
 function formatDate(iso: string) {
@@ -40,7 +41,7 @@ export default function ChangelogPage() {
   return (
     <div className="frame">
       <div className="gutter border-b border-line py-16 sm:py-20">
-        <p className="label mb-4">Changelog</p>
+        <p className="label mb-3">Changelog</p>
         <h1 className="h1">What changed, release by release.</h1>
         <p className="lede mt-5 max-w-[64ch]">
           Island follows Semantic Versioning. The current version is{" "}
@@ -75,7 +76,7 @@ export default function ChangelogPage() {
             >
               <div className="gutter pt-10 lg:border-r lg:border-line lg:!pr-8 lg:pb-12">
                 <div className="lg:sticky lg:top-24">
-                  <h2 className="group flex items-center gap-2 font-mono text-2xl font-medium tracking-[-0.02em]">
+                  <h2 className="group flex items-center gap-2 text-2xl font-bold tracking-[-0.015em]">
                     <a href={`#${anchor}`} className="rounded-sm">
                       {/^\d/.test(entry.version) ? `v${entry.version}` : entry.version}
                     </a>
@@ -103,7 +104,7 @@ export default function ChangelogPage() {
                 <div className="max-w-[720px] space-y-8">
                   {entry.groups.map((group) => (
                     <section key={group.title} aria-label={`${group.title} in ${entry.version}`}>
-                      <h3 className="label mb-3 flex items-center gap-2 !text-fg">
+                      <h3 className="mb-3 flex items-center gap-2 text-[14px] font-semibold">
                         <span
                           className="dot"
                           style={{ color: GROUP_COLOR[group.title.toLowerCase()] ?? "var(--text-2)" }}

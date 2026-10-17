@@ -2,21 +2,22 @@
 
 The product website for [Island](https://github.com/island-browser/island), a calm native desktop
 browser built on CEF with a built-in AI agent. It is a static Next.js site (App Router,
-`output: "export"`) styled with Tailwind CSS v4 and the Graphite design tokens from Island's
+`output: "export"`) styled with Tailwind CSS v4 and the Native look tokens from Island's
 `DESIGN.md`, deployed to GitHub Pages at <https://island-browser.github.io/site>.
 
-No analytics, no trackers, no remote fonts or images: Geist and Geist Mono are self-hosted from the
+No analytics, no trackers, no remote fonts or images: text uses the system font stack, like the
+browser's Native look, and Geist Mono (for code) is self-hosted from the
 [`geist`](https://www.npmjs.com/package/geist) package.
 
 ## Pages
 
 | Route         | Content                                                                     |
 | ------------- | --------------------------------------------------------------------------- |
-| `/`           | Landing page: product mockup, features, agents (MCP/ACP), keyboard, status  |
-| `/docs/`      | Build, run, test, agents, shortcuts, import, updates, releases              |
+| `/`           | Landing page: Native mockup, features, research, agents, looks, keyboard, availability, coming next |
+| `/docs/`      | Install and build, looks, tabs, reader and find, privacy and blocking, history, research, agents, shortcuts, updates |
 | `/changelog/` | Rendered from the browser repo's `CHANGELOG.md` at build time               |
 | `/download/`  | Per-platform archives from the latest GitHub release, with OS detection     |
-| `/privacy/`   | Privacy notes for the site and the browser                                  |
+| `/privacy/`   | The site, and what the browser sends and keeps                              |
 
 ## Develop
 
@@ -75,12 +76,16 @@ token with read-only *Contents* access to `island-browser/island` as the reposit
 
 ## Design tokens
 
-`app/globals.css` declares the Graphite tokens (light, dark, space markers, radii, spacing, motion)
-as CSS variables. `npm run check:tokens` reads the fenced `design-tokens` block from Island's
+`app/globals.css` declares the Native look colors (light, dark, and a no-JS dark fallback) and the
+Graphite radii, spacing and motion as CSS variables. `npm run check:tokens` reads the fenced
+`design-tokens-native` block (colors) and `design-tokens` block (the rest) from Island's
 `DESIGN.md` (from `../island/DESIGN.md` if present, otherwise from the browser repo on GitHub with
 `ISLAND_READ_TOKEN`) and fails with a per-token diff if anything drifted. In CI the check runs
 only when the `ISLAND_READ_TOKEN` secret is set; without it the workflow skips it with a warning.
 Pull requests run lint, the token check, and the build, but never deploy.
+
+`designBranch` in `site.config.ts` names the browser branch the remote check reads DESIGN.md
+from (`main`); the check prints a warning whenever it differs from `branch`.
 
 ## Deploy
 
