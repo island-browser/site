@@ -15,9 +15,12 @@ Product website for the Island browser: Next.js App Router, static export (`out/
 - Repository coordinates and the default site URL live only in `site.config.ts`.
 - `npm run build` runs `scripts/fetch-data.mjs` first (CHANGELOG.md, VERSION, releases from
   `island-browser/island`, falling back to `../island`, then to the committed `data/` snapshot).
-- Graphite design tokens in `app/globals.css` must match Island's `DESIGN.md`; run
-  `npm run check:tokens` after touching them.
+- The site uses the browser's Native look: colors in `app/globals.css` must match the
+  `design-tokens-native` block of Island's `DESIGN.md` (radii, spacing and motion the Graphite
+  `design-tokens` block); run `npm run check:tokens` after touching them.
 - Design rules: no gradients of any kind, accent only for actions/active state/links, hairline
-  borders, Geist + Geist Mono (self-hosted via the `geist` package), motion only fade/translate and
-  always reduced-motion safe.
+  borders, the system font stack plus Geist Mono (self-hosted via the `geist` package) for code, no
+  remote fonts, motion only fade/translate and always reduced-motion safe.
+- Anything not in `data/VERSION` yet is labelled with `sevenLabel()` ("Coming in 0.7") or sits in
+  the home page's "Coming next" section; never hand-edit `data/` to claim an unreleased version.
 - Every internal link goes through `next/link` so `NEXT_PUBLIC_BASE_PATH` is respected.
