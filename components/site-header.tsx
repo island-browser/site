@@ -10,8 +10,7 @@ import { ThemeToggle } from "@/components/theme-toggle";
 import { links } from "@/lib/site";
 
 const NAV = [
-  { href: "/#features", label: "Features" },
-  { href: "/#agents", label: "Agents" },
+  { href: "/", label: "Overview" },
   { href: "/docs/", label: "Docs" },
   { href: "/changelog/", label: "Changelog" },
   { href: "/download/", label: "Download" },
@@ -41,7 +40,7 @@ export function SiteHeader({ version }: { version: string }) {
 
   return (
     <header className="sticky top-0 z-50 border-b border-line bg-[var(--header-bg)] backdrop-blur-md backdrop-saturate-150">
-      <div className="frame-inner gutter flex h-16 items-center gap-6">
+      <div className="frame-inner gutter relative flex h-[52px] items-center gap-6">
         <div className="flex items-center gap-3">
           <Link
             href="/"
@@ -53,31 +52,22 @@ export function SiteHeader({ version }: { version: string }) {
           </Link>
           <Link
             href={`/changelog/#v${version}`}
-            className="hidden h-6 items-center rounded-full border border-line bg-surface px-2 font-mono text-[11px] text-fg-2 transition-colors hover:border-line-strong hover:text-fg sm:inline-flex"
+            className="hidden h-[22px] items-center rounded-full bg-fill px-2 text-[12px] text-fg-2 transition-colors hover:text-fg sm:inline-flex"
             aria-label={`Version ${version} — what's new`}
           >
             v{version}
           </Link>
         </div>
 
-        <nav aria-label="Primary" className="hidden md:block">
-          <ul className="flex items-center gap-1">
-            {NAV.map((item) => {
-              const current = isCurrent(pathname, item.href);
-              return (
-                <li key={item.href}>
-                  <Link
-                    href={item.href}
-                    aria-current={current ? "page" : undefined}
-                    className={`rounded-sm px-2.5 py-1.5 text-sm transition-colors ${
-                      current ? "text-fg" : "text-fg-2 hover:text-fg"
-                    }`}
-                  >
-                    {item.label}
-                  </Link>
-                </li>
-              );
-            })}
+        <nav aria-label="Primary" className="absolute left-1/2 hidden -translate-x-1/2 md:block">
+          <ul className="segmented">
+            {NAV.map((item) => (
+              <li key={item.href} className="contents">
+                <Link href={item.href} aria-current={isCurrent(pathname, item.href) ? "page" : undefined}>
+                  {item.label}
+                </Link>
+              </li>
+            ))}
           </ul>
         </nav>
 

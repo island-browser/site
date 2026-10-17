@@ -35,7 +35,7 @@ export function ThemeSwitcher() {
     <div
       role="radiogroup"
       aria-label="Theme"
-      className="inline-flex items-center gap-0.5 rounded-full border border-line bg-surface p-0.5"
+      className="segmented"
     >
       {OPTIONS.map(({ value, label, Icon }) => {
         const active = preference === value;
@@ -45,14 +45,12 @@ export function ThemeSwitcher() {
             type="button"
             role="radio"
             aria-checked={active}
-            aria-label={label}
             title={label}
             onClick={() => setTheme(value)}
-            className={`inline-flex size-7 items-center justify-center rounded-full transition-colors duration-150 ${
-              active ? "bg-surface-2 text-fg" : "text-fg-2 hover:text-fg"
-            }`}
+            className="gap-1.5"
           >
             <Icon className="size-3.5" aria-hidden />
+            <span className="max-sm:sr-only">{label}</span>
           </button>
         );
       })}

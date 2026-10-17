@@ -10,6 +10,7 @@ const COLUMNS = [
     items: [
       { href: "/#features", label: "Features" },
       { href: "/#agents", label: "Agents" },
+      { href: "/#next", label: "Coming next" },
       { href: "/download/", label: "Download" },
       { href: "/changelog/", label: "Changelog" },
     ],
@@ -36,7 +37,7 @@ export function SiteFooter({ version }: { version: string }) {
               <span>Island</span>
             </Link>
             <p className="max-w-[34ch] text-sm text-fg-2">
-              Made openly. Browser software is in development.
+              Made in the open. Builds are unsigned prereleases; macOS on Apple silicon is the verified target.
             </p>
           </div>
           {COLUMNS.map((col) => (
@@ -61,8 +62,8 @@ export function SiteFooter({ version }: { version: string }) {
           ))}
         </div>
         <div className="gutter flex flex-wrap items-center justify-between gap-4 border-t border-line py-5">
-          <p className="font-mono text-xs text-fg-2">
-            Island v{version} · MIT License
+          <p className="text-xs text-fg-2">
+            Island {version} · MIT License
           </p>
           <ThemeSwitcher />
         </div>

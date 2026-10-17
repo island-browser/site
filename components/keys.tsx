@@ -7,7 +7,12 @@ const SYMBOLS: Record<string, { glyph: string; name: string }> = {
   Shift: { glyph: "⇧", name: "Shift" },
   Opt: { glyph: "⌥", name: "Option" },
   Ctrl: { glyph: "Ctrl", name: "Control" },
+  Control: { glyph: "⌃", name: "Control" },
   Esc: { glyph: "Esc", name: "Escape" },
+  Up: { glyph: "↑", name: "Up arrow" },
+  Down: { glyph: "↓", name: "Down arrow" },
+  Left: { glyph: "←", name: "Left arrow" },
+  Right: { glyph: "→", name: "Right arrow" },
 };
 
 /** One key cap. Symbol keys keep a spoken name for screen readers. */

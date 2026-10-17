@@ -1,5 +1,4 @@
 import { GeistMono } from "geist/font/mono";
-import { GeistSans } from "geist/font/sans";
 import type { Metadata, Viewport } from "next";
 
 import "./globals.css";
@@ -21,29 +20,29 @@ export const metadata: Metadata = {
     siteName: "Island",
     title: "Island — a calm native browser",
     description:
-      "Spaces, pinned tabs, split view, and an AI agent in the sidebar, in a native CEF browser that agents can drive over MCP. Open source, built in the open.",
+      "Spaces, Reader, ad and tracker blocking, research with cited reports, and an AI agent in the sidebar, in a native CEF browser that agents can drive over MCP. Open source, built in the open.",
     url: "./",
     images: [{ url: "og.png", width: 1200, height: 630, alt: "Island — a calm native browser with a built-in AI agent" }],
   },
   twitter: {
     card: "summary_large_image",
     title: "Island — a calm native browser",
-    description: "Spaces, pinned tabs, split view, and a built-in AI agent in a native CEF browser.",
+    description: "Spaces, Reader, blocking, research reports, and a built-in AI agent in a native CEF browser.",
     images: ["og.png"],
   },
 };
 
 export const viewport: Viewport = {
   themeColor: [
-    { media: "(prefers-color-scheme: light)", color: "#FAFAFA" },
-    { media: "(prefers-color-scheme: dark)", color: "#0A0A0A" },
+    { media: "(prefers-color-scheme: light)", color: "#F6F6F8" },
+    { media: "(prefers-color-scheme: dark)", color: "#252527" },
   ],
 };
 
 export default function RootLayout({ children }: LayoutProps<"/">) {
   const version = getVersion();
   return (
-    <html lang="en" className={`${GeistSans.variable} ${GeistMono.variable}`} suppressHydrationWarning>
+    <html lang="en" className={GeistMono.variable} suppressHydrationWarning>
       <head>
         <script dangerouslySetInnerHTML={{ __html: themeInitScript }} />
       </head>
