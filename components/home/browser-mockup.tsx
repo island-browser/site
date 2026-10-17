@@ -375,10 +375,10 @@ function StartPage() {
 
 function RepoPage() {
   const rows = [
-    ["Native look: source-list sidebar and address indicators", "#58 · open"],
-    ["Research plan graph in a Plan tab", "#57 · open"],
+    ["Release 0.7.1: fix the Linux build", "#62 · merged"],
+    ["Native look: source-list sidebar and address indicators", "#58 · merged"],
+    ["Research plan graph in a Plan tab", "#57 · merged"],
     ["Shortcut cheatsheet on ⌘/", "#56 · merged"],
-    ["Release 0.6.2", "#55 · merged"],
   ];
   return (
     <div className={s.doc}>

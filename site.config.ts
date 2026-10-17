@@ -16,7 +16,7 @@ export const siteConfig = {
    * `main` only with Island 0.7, so until then it is read from the branch that defines it.
    * Set this back to "main" once 0.7 is merged there.
    */
-  designBranch: "design/macos-native-spec",
+  designBranch: "main",
   /** Canonical public URL (overridable with NEXT_PUBLIC_SITE_URL). */
   defaultSiteUrl: "https://island-browser.github.io/site",
 } as const;
