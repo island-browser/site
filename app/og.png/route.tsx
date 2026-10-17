@@ -18,7 +18,6 @@ const BG = "#2A2A2D";
 const TEXT = "#F5F5F7";
 const TEXT_2 = "#98989D";
 const BORDER = "#38383A";
-const SELECTION = "#0A6FE0";
 
 function Cross({ x, y }: { x: number; y: number }) {
   return (
@@ -61,7 +60,6 @@ export function GET() {
         </div>
         <div style={{ position: "absolute", left: 128, right: 128, bottom: 36, display: "flex", justifyContent: "space-between", fontFamily: "Geist Mono", fontSize: 20, color: TEXT_2 }}>
           <span>CEF · Reader · blocking · research · ACP agent · MCP tools</span>
-          <span style={{ width: 12, height: 12, borderRadius: 99, background: SELECTION, marginTop: 6 }} />
         </div>
       </div>
     ),
