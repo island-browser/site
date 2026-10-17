@@ -23,9 +23,9 @@ import { links } from "@/lib/site";
 import { pageMetadata } from "@/lib/metadata";
 
 export const metadata: Metadata = pageMetadata({
-  title: "Docs",
-  path: "/docs/",
-  socialTitle: "Island Docs",
+  title: "Technical reference",
+  path: "/docs/technical/",
+  socialTitle: "Island technical reference",
   description:
     "Install or build Island; tabs, spaces, tab sleep and Peek; Reader, find and ad and tracker blocking; history search; Research and the Plan tab; agents over ACP and MCP; every keyboard shortcut; looks; and updates.",
 });
@@ -117,14 +117,14 @@ const OTHER_KEYS: Record<string, string> = { Mod: "Ctrl" };
 /** Key caps for a keymap chord on Windows and Linux. */
 const otherCombo = (chord: string): Combo => chord.split(/\+(?!$)/).map((k) => OTHER_KEYS[k] ?? k);
 
-export default function DocsPage() {
+export default function TechnicalReferencePage() {
   const version = getVersion();
   const seven = sevenLabel(version);
   const sevenTag = <span className="tag tag-new align-[1px]">{seven}</span>;
   return (
     <div className="frame">
       <div className="gutter border-b border-line py-16 sm:py-20">
-        <p className="label mb-3">Island Docs</p>
+        <p className="label mb-3">Technical reference</p>
         <h1 className="h1">How Island works.</h1>
         <p className="lede mt-5 max-w-[64ch]">
           Version <span className="font-mono text-[0.9em] text-fg">{version}</span>. Everything below

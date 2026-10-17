@@ -117,7 +117,7 @@ export function Research({ version }: { version: string }) {
           </>
         }
         action={
-          <Link href="/docs/#research" className="btn btn-secondary">
+          <Link href="/docs/technical/#research" className="btn btn-secondary">
             How research works <ArrowRight className="size-4" aria-hidden />
           </Link>
         }
@@ -244,7 +244,7 @@ export function Agents() {
           </>
         }
         action={
-          <Link href="/docs/#agents" className="btn btn-secondary">
+          <Link href="/docs/technical/#agents" className="btn btn-secondary">
             Set up an agent <ArrowRight className="size-4" aria-hidden />
           </Link>
         }
@@ -327,7 +327,7 @@ export function KeyboardSection({ version }: { version: string }) {
           </>
         }
         action={
-          <Link href="/docs/#shortcuts" className="btn btn-secondary">
+          <Link href="/docs/technical/#shortcuts" className="btn btn-secondary">
             All shortcuts <ArrowRight className="size-4" aria-hidden />
           </Link>
         }
@@ -505,7 +505,7 @@ export function OpenSource() {
           <a href={links.repo} className="btn btn-primary">
             Visit the repository <ArrowUpRight className="size-4" aria-hidden />
           </a>
-          <Link href="/docs/#quick-start" className="btn btn-secondary">
+          <Link href="/docs/technical/#quick-start" className="btn btn-secondary">
             Build from source
           </Link>
         </div>

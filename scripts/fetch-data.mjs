@@ -7,10 +7,12 @@
 //      is sent when set — the browser repo is private for now, so unauthenticated calls 404),
 //   2. a sibling checkout at ../island (local development),
 //   3. the snapshot already committed under data/ (left untouched).
+// The user guide (docs/user-guide/SUMMARY.md and every page it links) is resolved the same way,
+// as one unit: all pages come from one source, or the committed snapshot in data/user-guide/ stays.
 // A failed or blocked network never fails the build; it only means the snapshot is used.
 // Set ISLAND_DATA_OFFLINE=1 to skip the network entirely.
 
-import { existsSync, readFileSync, writeFileSync } from "node:fs";
+import { existsSync, mkdirSync, readFileSync, rmSync, writeFileSync } from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 
@@ -18,6 +20,8 @@ import { rawUrl, releasesApiUrl, repoSlug } from "../site.config.ts";
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const localCheckout = path.resolve(root, process.env.ISLAND_LOCAL_CHECKOUT || "../island");
+const GUIDE_DIR = "docs/user-guide";
+const GUIDE_OUT = "data/user-guide";
 const offline = process.env.ISLAND_DATA_OFFLINE === "1";
 // ISLAND_READ_TOKEN: a fine-grained token with read access to the (currently private) browser repo.
 const token = process.env.ISLAND_READ_TOKEN || process.env.GITHUB_TOKEN || "";
@@ -98,8 +102,62 @@ const jobs = [
   },
 ];
 
-console.log(`[fetch-data] source repository: ${repoSlug}${token ? " (authenticated)" : ""}`);
+// Page paths (relative to the guide root) linked from SUMMARY.md; README.md is the landing page.
+function guidePages(summary) {
+  const pages = new Set(["README.md"]);
+  for (const m of summary.matchAll(/\]\(([^)#?\s]+\.md)\)/g)) {
+    const rel = path.posix.normalize(m[1]);
+    if (!rel.startsWith("..") && !path.posix.isAbsolute(rel)) pages.add(rel);
+  }
+  return [...pages];
+}
+
+const guideSources = [
+  ...(offline
+    ? []
+    : [["github", (file) => fetchText(rawUrl(`${GUIDE_DIR}/${file}`))]]),
+  ["../island", (file) => readLocal(`${GUIDE_DIR}/${file}`)],
+];
+
+/** Fetches SUMMARY.md and every page from one source; returns the files or throws. */
+async function loadGuide(read) {
+  const summary = await read("SUMMARY.md");
+  if (summary == null || !/^\* \[/m.test(summary)) throw new Error("no SUMMARY.md");
+  const files = { "SUMMARY.md": summary };
+  for (const page of guidePages(summary)) {
+    const text = await read(page);
+    if (text == null || !/^# /m.test(text)) throw new Error(`${page} missing or empty`);
+    files[page] = text;
+  }
+  return files;
+}
+
+async function refreshGuide() {
+  for (const [label, read] of guideSources) {
+    try {
+      const files = await loadGuide(read);
+      rmSync(path.join(root, GUIDE_OUT), { recursive: true, force: true }); // drop pages removed upstream
+      for (const [rel, text] of Object.entries(files)) {
+        const target = path.join(root, GUIDE_OUT, rel);
+        mkdirSync(path.dirname(target), { recursive: true });
+        writeFileSync(target, text.replace(/\r\n/g, "\n"));
+      }
+      console.log(`[fetch-data] ${GUIDE_OUT} <- ${label} (${Object.keys(files).length} files)`);
+      return;
+    } catch (err) {
+      console.log(`[fetch-data] ${GUIDE_OUT}: ${label} unavailable (${err.message})`);
+    }
+  }
+  if (existsSync(path.join(root, GUIDE_OUT, "SUMMARY.md"))) {
+    console.log(`[fetch-data] ${GUIDE_OUT} <- committed snapshot`);
+  } else {
+    console.error(`[fetch-data] ${GUIDE_OUT}: no usable source and no snapshot`);
+    failures += 1;
+  }
+}
+
 let failures = 0;
+console.log(`[fetch-data] source repository: ${repoSlug}${token ? " (authenticated)" : ""}`);
 for (const job of jobs) {
   const target = path.join(root, job.out);
   const sources = [];
@@ -130,5 +188,7 @@ for (const job of jobs) {
     }
   }
 }
+
+await refreshGuide();
 
 process.exit(failures ? 1 : 0);

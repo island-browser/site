@@ -19,7 +19,8 @@ const COLUMNS = [
     title: "Resources",
     items: [
       { href: "/docs/", label: "Docs" },
-      { href: "/docs/#quick-start", label: "Quick start" },
+      { href: "/docs/getting-started/install/", label: "Install guide" },
+      { href: "/docs/technical/", label: "Technical reference" },
       { href: "/privacy/", label: "Privacy" },
       { href: links.repo, label: "GitHub", external: true },
     ],

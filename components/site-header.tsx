@@ -16,8 +16,11 @@ const NAV = [
   { href: "/download/", label: "Download" },
 ];
 
-const isCurrent = (pathname: string, href: string) =>
-  !href.includes("#") && pathname.replace(/\/?$/, "/") === href;
+const isCurrent = (pathname: string, href: string) => {
+  const here = pathname.replace(/\/?$/, "/");
+  // The guide lives under /docs/, so every page below it keeps "Docs" current.
+  return !href.includes("#") && (href === "/docs/" ? here.startsWith(href) : here === href);
+};
 
 export function SiteHeader({ version }: { version: string }) {
   const pathname = usePathname();
