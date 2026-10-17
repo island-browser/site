@@ -13,11 +13,12 @@ const size = { width: 1200, height: 630 };
 const fontDir = path.join(process.cwd(), "node_modules/geist/dist/fonts");
 const font = (file: string) => readFileSync(path.join(fontDir, file));
 
-// Graphite dark tokens.
-const BG = "#0A0A0A";
-const TEXT = "#EDEDED";
-const TEXT_2 = "#A1A1A1";
-const BORDER = "#2A2A2A";
+// Native dark tokens (design-tokens-native).
+const BG = "#2A2A2D";
+const TEXT = "#F5F5F7";
+const TEXT_2 = "#98989D";
+const BORDER = "#38383A";
+const SELECTION = "#0A6FE0";
 
 function Cross({ x, y }: { x: number; y: number }) {
   return (
@@ -55,16 +56,12 @@ export function GET() {
             AN OPEN-SOURCE NATIVE BROWSER
           </div>
           <div style={{ marginTop: 28, fontSize: 84, fontWeight: 600, lineHeight: 1, letterSpacing: -4, color: TEXT }}>
-            A calm browser, with an agent at your side.
+            A calm browser, with an agent that shows its work.
           </div>
         </div>
         <div style={{ position: "absolute", left: 128, right: 128, bottom: 36, display: "flex", justifyContent: "space-between", fontFamily: "Geist Mono", fontSize: 20, color: TEXT_2 }}>
-          <span>CEF · spaces · split view · ACP agent · MCP tools</span>
-          <span style={{ display: "flex", gap: 10 }}>
-            <span style={{ width: 12, height: 12, borderRadius: 99, background: "#0090FF", marginTop: 6 }} />
-            <span style={{ width: 12, height: 12, borderRadius: 99, background: "#30A46C", marginTop: 6 }} />
-            <span style={{ width: 12, height: 12, borderRadius: 99, background: "#E5484D", marginTop: 6 }} />
-          </span>
+          <span>CEF · Reader · blocking · research · ACP agent · MCP tools</span>
+          <span style={{ width: 12, height: 12, borderRadius: 99, background: SELECTION, marginTop: 6 }} />
         </div>
       </div>
     ),

@@ -11,7 +11,7 @@ export default function NotFound() {
   return (
     <div className="frame">
       <div className="gutter flex min-h-[64vh] flex-col items-center justify-center py-24 text-center">
-        <p className="label mb-4">404</p>
+        <p className="label mb-3">404</p>
         <h1 className="h1">Nothing is open here.</h1>
         <p className="lede mt-5 max-w-[48ch]">
           That page has moved, or it was never part of this build.

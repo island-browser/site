@@ -32,4 +32,4 @@ export const links = {
 export const tagline = "A calm native browser with a built-in AI agent";
 
 export const description =
-  "Island is an open-source native desktop browser built on CEF: an Arc-style sidebar with colored spaces and pinned tabs, split view, an all-tabs overview, a built-in ACP agent, and browser tools any AI agent can use over MCP.";
+  "Island is an open-source native desktop browser built on CEF: spaces and pinned tabs in a quiet sidebar, split view, tab sleep and Peek, Reader view, find in page, built-in ad and tracker blocking, on-device history search, research with cited reports, an ACP agent in the sidebar, and browser tools any AI agent can use over MCP.";
