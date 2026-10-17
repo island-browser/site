@@ -84,10 +84,10 @@ Graphite radii, spacing and motion as CSS variables. `npm run check:tokens` read
 only when the `ISLAND_READ_TOKEN` secret is set; without it the workflow skips it with a warning.
 Pull requests run lint, the token check, and the build, but never deploy.
 
-The `design-tokens-native` block lands in the browser's `main` with Island 0.7. Until then the
-check passes only against a 0.7 checkout, for example
-`ISLAND_LOCAL_CHECKOUT=../island-0.7 npm run check:tokens`, and fails against `main` with
-"DESIGN.md has no ```design-tokens-native fenced block". Merge this site after 0.7 ships.
+The `design-tokens-native` block lands in the browser's `main` with Island 0.7. Until then
+`designBranch` in `site.config.ts` points the remote check at `design/macos-native-spec`, which
+defines it (the check prints a warning while it differs from `branch`). Set it back to `main`
+once 0.7 is merged there. Merge this site after 0.7 ships.
 
 ## Deploy
 

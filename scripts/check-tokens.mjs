@@ -5,14 +5,14 @@
 // spacing and motion of the Graphite contract (`design-tokens`), which Native does not redefine.
 //
 // DESIGN.md is read from a sibling checkout (../island/DESIGN.md, or ISLAND_LOCAL_CHECKOUT)
-// when present, otherwise fetched from the browser repo's main branch. The browser repo is
+// when present, otherwise fetched from the browser repo's `designBranch` (site.config.ts). The browser repo is
 // private for now, so the fetch needs ISLAND_READ_TOKEN (or GITHUB_TOKEN) with read access.
 
 import { existsSync, readFileSync } from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 
-import { rawUrl } from "../site.config.ts";
+import { designRawUrl, siteConfig } from "../site.config.ts";
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const localDesign = path.resolve(
@@ -26,7 +26,13 @@ async function loadDesign() {
   if (existsSync(localDesign)) {
     return { text: readFileSync(localDesign, "utf8"), source: localDesign };
   }
-  const url = rawUrl("DESIGN.md");
+  const url = designRawUrl("DESIGN.md");
+  if (siteConfig.designBranch !== siteConfig.branch) {
+    console.warn(
+      `check:tokens: reading DESIGN.md from ${siteConfig.designBranch}, not ${siteConfig.branch} ` +
+        "(see designBranch in site.config.ts)",
+    );
+  }
   const token = process.env.ISLAND_READ_TOKEN || process.env.GITHUB_TOKEN || "";
   const headers = { "User-Agent": "island-site-check-tokens" };
   if (token) headers.Authorization = `Bearer ${token}`;
