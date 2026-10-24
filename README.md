@@ -59,9 +59,11 @@ Repository coordinates (owner, repo names, branch, default site URL) live in one
 `npm run build` runs `scripts/fetch-data.mjs` first (`prebuild`). It refreshes three files under
 `data/`, taking the first source that works:
 
-1. GitHub: `CHANGELOG.md` and `VERSION` from `raw.githubusercontent.com`, and the release list from
-   `api.github.com/repos/island-browser/island/releases`, sending `ISLAND_READ_TOKEN` (or
-   `GITHUB_TOKEN`) when set.
+1. GitHub: the release list from `api.github.com/repos/island-browser/island/releases`, then
+   `CHANGELOG.md`, `VERSION` and the user guide from `raw.githubusercontent.com` **at the tag of the
+   newest published vX.Y.Z release** (or `main` when there is none), sending `ISLAND_READ_TOKEN`
+   (or `GITHUB_TOKEN`) when set. The browser's `main` may already carry the next version before
+   its packages exist; reading at the tag keeps the site on what can actually be downloaded.
 2. A sibling checkout at `../island`, for local development.
 3. The snapshot already committed in `data/`, so a blocked or failed network never breaks a build.
 
@@ -91,9 +93,15 @@ from (`main`); the check prints a warning whenever it differs from `branch`.
 
 `.github/workflows/deploy.yml` lints, checks the tokens, builds with
 `NEXT_PUBLIC_BASE_PATH=/site`, and deploys `out/` with GitHub Pages. It runs on every push to
-`main`, daily at 06:17 UTC (to pick up new releases), on `workflow_dispatch`, and on a
-`repository_dispatch` event of type `island-release`, which the browser repo can send after
-publishing a release:
+`main`, daily at 06:17 UTC, on `workflow_dispatch`, and on a `repository_dispatch` event of type
+`island-release`. An hourly scheduled run (minute 41) compares the newest release tag of the
+browser repo with the live site's `/release.txt` and builds only when they differ, so a new
+release reaches the site within an hour. On scheduled and dispatched runs a design-token drift is
+reported (the step shows as failed) but does not block the deploy; pushes and pull requests still
+fail on it.
+
+For an update right after a release, the browser repo can send the dispatch itself (this needs a
+token with access to this repository):
 
 ```bash
 gh api repos/island-browser/site/dispatches -f event_type=island-release
