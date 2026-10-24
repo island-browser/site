@@ -28,6 +28,8 @@
   --warning-text: #6A4A00;
   --success: #248A3D;
   --danger: #D70015;
+  --segment-selected: #E3E3E8;
+  --segment-outline: transparent;
   --branch-a: #0A64D8;
   --branch-b: #8E44AD;
   --branch-c: #C25400;
@@ -75,6 +77,8 @@
   --warning-text: #FFD60A;
   --success: #30D158;
   --danger: #FF453A;
+  --segment-selected: #3A3A3D;
+  --segment-outline: #48484A;
   --branch-a: #0A84FF;
   --branch-b: #BF5AF2;
   --branch-c: #FF9F0A;
@@ -107,6 +111,8 @@
     --warning-text: #FFD60A;
     --success: #30D158;
     --danger: #FF453A;
+    --segment-selected: #3A3A3D;
+    --segment-outline: #48484A;
     --branch-a: #0A84FF;
     --branch-b: #BF5AF2;
     --branch-c: #FF9F0A;
@@ -525,10 +531,10 @@
   .segmented [aria-current="page"],
   .segmented [aria-checked="true"],
   .segmented [aria-selected="true"] {
-    background: var(--surface);
+    background: var(--segment-selected);
     color: var(--text);
     font-weight: 500;
-    box-shadow: 0 1px 2px rgb(0 0 0 / 0.12);
+    box-shadow: inset 0 0 0 1px var(--segment-outline);
   }
 
   .dot {

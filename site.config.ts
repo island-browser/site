@@ -24,8 +24,8 @@ export const siteConfig = {
 export const repoSlug = `${siteConfig.owner}/${siteConfig.repo}`;
 export const repoUrl = `https://github.com/${repoSlug}`;
 export const siteRepoUrl = `https://github.com/${siteConfig.owner}/${siteConfig.siteRepo}`;
-export const rawUrl = (file: string) =>
-  `https://raw.githubusercontent.com/${repoSlug}/${siteConfig.branch}/${file}`;
+export const rawUrl = (file: string, ref: string = siteConfig.branch) =>
+  `https://raw.githubusercontent.com/${repoSlug}/${ref}/${file}`;
 export const designRawUrl = (file: string) =>
   `https://raw.githubusercontent.com/${repoSlug}/${siteConfig.designBranch}/${file}`;
 export const releasesApiUrl = `https://api.github.com/repos/${repoSlug}/releases`;

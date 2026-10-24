@@ -2,6 +2,10 @@
 // Refreshes the build-time data the site renders: Island's CHANGELOG.md, its VERSION file,
 // and the list of GitHub releases. Runs as `prebuild`.
 //
+// Files are read at the tag of the newest published vX.Y.Z release, so the site never shows a
+// version whose packages are not out yet (main may already carry the next VERSION). Without a
+// release they are read from `branch` in site.config.ts.
+//
 // Each file is resolved in order and the first good source wins:
 //   1. GitHub (raw.githubusercontent.com / api.github.com; ISLAND_READ_TOKEN or GITHUB_TOKEN
 //      is sent when set — the browser repo is private for now, so unauthenticated calls 404),
@@ -16,7 +20,7 @@ import { existsSync, mkdirSync, readFileSync, rmSync, writeFileSync } from "node
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 
-import { rawUrl, releasesApiUrl, repoSlug } from "../site.config.ts";
+import { rawUrl, releasesApiUrl, repoSlug, siteConfig } from "../site.config.ts";
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const localCheckout = path.resolve(root, process.env.ISLAND_LOCAL_CHECKOUT || "../island");
@@ -44,6 +48,15 @@ function readLocal(file) {
   return existsSync(p) ? readFileSync(p, "utf8") : null;
 }
 
+const isVersionTag = (tag) => /^v\d+\.\d+\.\d+/.test(tag ?? "");
+
+// Newest published vX.Y.Z release; the hourly deploy gate in deploy.yml picks the same one.
+function newestReleaseTag(list) {
+  const versioned = list.filter((r) => isVersionTag(r.tag_name));
+  versioned.sort((a, b) => (b.published_at ?? "").localeCompare(a.published_at ?? ""));
+  return versioned[0]?.tag_name ?? null;
+}
+
 function slimReleases(list) {
   if (!Array.isArray(list)) throw new Error("releases response is not an array");
   return list
@@ -62,35 +75,35 @@ function slimReleases(list) {
     }));
 }
 
+let releases = null;
+if (!offline) {
+  try {
+    releases = slimReleases(
+      JSON.parse(await fetchText(`${releasesApiUrl}?per_page=30`, "application/vnd.github+json")),
+    );
+  } catch (err) {
+    console.log(`[fetch-data] releases: github unavailable (${err.message})`);
+  }
+}
+const ref = (releases && newestReleaseTag(releases)) || siteConfig.branch;
+
 const jobs = [
   {
     out: "data/changelog.md",
-    remote: () => fetchText(rawUrl("CHANGELOG.md")),
+    remote: () => fetchText(rawUrl("CHANGELOG.md", ref)),
     local: () => readLocal("CHANGELOG.md"),
     validate: (s) => typeof s === "string" && /^## \[/m.test(s),
   },
   {
     out: "data/VERSION",
-    remote: () => fetchText(rawUrl("VERSION")),
+    remote: () => fetchText(rawUrl("VERSION", ref)),
     local: () => readLocal("VERSION"),
     validate: (s) => typeof s === "string" && /^\d+\.\d+\.\d+\S*\s*$/.test(s),
     normalize: (s) => `${s.trim()}\n`,
   },
   {
     out: "data/releases.json",
-    remote: async () =>
-      JSON.stringify(
-        slimReleases(
-          JSON.parse(
-            await fetchText(
-              `${releasesApiUrl}?per_page=30`,
-              "application/vnd.github+json",
-            ),
-          ),
-        ),
-        null,
-        2,
-      ) + "\n",
+    remote: () => (releases ? JSON.stringify(releases, null, 2) + "\n" : null),
     local: () => null,
     validate: (s) => {
       try {
@@ -115,7 +128,7 @@ function guidePages(summary) {
 const guideSources = [
   ...(offline
     ? []
-    : [["github", (file) => fetchText(rawUrl(`${GUIDE_DIR}/${file}`))]]),
+    : [["github", (file) => fetchText(rawUrl(`${GUIDE_DIR}/${file}`, ref))]]),
   ["../island", (file) => readLocal(`${GUIDE_DIR}/${file}`)],
 ];
 
@@ -157,7 +170,9 @@ async function refreshGuide() {
 }
 
 let failures = 0;
-console.log(`[fetch-data] source repository: ${repoSlug}${token ? " (authenticated)" : ""}`);
+console.log(
+  `[fetch-data] source repository: ${repoSlug}@${ref}${token ? " (authenticated)" : ""}`,
+);
 for (const job of jobs) {
   const target = path.join(root, job.out);
   const sources = [];

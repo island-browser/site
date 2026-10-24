@@ -13,8 +13,9 @@ This block is written and re-added by `next dev` — verify at `node_modules/nex
 Product website for the Island browser: Next.js App Router, static export (`out/`), Tailwind v4.
 
 - Repository coordinates and the default site URL live only in `site.config.ts`.
-- `npm run build` runs `scripts/fetch-data.mjs` first (CHANGELOG.md, VERSION, releases from
-  `island-browser/island`, falling back to `../island`, then to the committed `data/` snapshot).
+- `npm run build` runs `scripts/fetch-data.mjs` first (releases from `island-browser/island`, then
+  CHANGELOG.md, VERSION and the user guide at the newest release tag; falling back to `../island`,
+  then to the committed `data/` snapshot).
 - The site uses the browser's Native look: colors in `app/globals.css` must match the
   `design-tokens-native` block of Island's `DESIGN.md` (radii, spacing and motion the Graphite
   `design-tokens` block); run `npm run check:tokens` after touching them.
